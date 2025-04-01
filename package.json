@@ -9,12 +9,15 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "postinstall": "npm run copy-eval-license",
-    "copy-eval-license": "node -e \"require('fs').copyFileSync('../yFiles-for-HTML-Complete-3.0-Evaluation/lib/license.json','./src/license.json')\""
+    "copy-eval-license": "node -e \"require('fs').copyFileSync('./src/assets/license.json','./src/license.json')\""
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.0.14",
+    "@yfiles/yfiles": "file:../../../Users/HP/Downloads/yFiles-for-HTML-Complete-3.0-Evaluation/yFiles-for-HTML-Complete-3.0-Evaluation/lib/yfiles-30.0.0+eval-dev/package",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "@yfiles/yfiles": "../yFiles-for-HTML-Complete-3.0-Evaluation/lib-dev/yfiles-30.0.3+eval-dev.tgz"
+    "tailwindcss": "^4.0.14",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",

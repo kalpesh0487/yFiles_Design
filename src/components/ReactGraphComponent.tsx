@@ -1,56 +1,156 @@
-import { useLayoutEffect, useMemo, useRef } from 'react'
-import { GraphComponent, GraphEditorInputMode, IGraph, License, Point, Rect } from '@yfiles/yfiles'
-import licenseData from '../license.json'
-
-License.value = licenseData
-
-function createSampleGraph(graph: IGraph): void {
-  // create some nodes
-  const node1 = graph.createNodeAt(new Point(30, 30))
-  const node2 = graph.createNodeAt(new Point(150, 30))
-  const node3 = graph.createNode(new Rect(230, 200, 60, 30))
-
-  // create some edges between the nodes
-  graph.createEdge(node1, node2)
-  graph.createEdge(node1, node3)
-  const edge = graph.createEdge(node2, node3)
-  // Creates the first bend for edge at (260, 30)
-  graph.addBend(edge, new Point(260, 30))
-
-  // add labels to some graph elements
-  graph.addLabel(node1, 'n1')
-  graph.addLabel(node2, 'n2')
-  graph.addLabel(node3, 'n3')
-}
+import { useLayoutEffect, useRef, useState } from 'react';
+import {
+  GraphComponent,
+  GraphViewerInputMode,
+  License,
+  LayoutExecutor,
+} from '@yfiles/yfiles';
+import licenseData from '../assets/license.json';
+import '../styles/ReactGraphComponent.css';
+import { createSampleGraph } from '../functions/createSampleGraph';
+import { initializeToolTips } from '../functions/initializeToolTips';
+import useHierarchicalSideBarStore from '../store/hierarchicalSideBarStore';
+import useOrganicSideBarStore from '../store/sideBarOrganicStore';
+import useOrthogonalSideBarStore from '../store/OrthogonalSideBarStore';
+import useCircularSideBarStore from '../store/CircularSideBarStore';
+import useTreeSideBarStore from '../store/TreeSidebarStore';
+import Inventory from './Inventory';
+import { useNetworkStore } from '../store/dataStore';
+import useSideBarStore from '../store/sideBarStore';
 
 export function ReactGraphComponent() {
-  const graphComponentContainer = useRef<HTMLDivElement>(null)
+  const graphComponentContainer = useRef<HTMLDivElement>(null);
+  const graphComponentRef = useRef<GraphComponent | null>(null);
+  const [showLabels, setShowLabels] = useState(false);
 
-  const graphComponent = useMemo(() => {
-    // include the yFiles License
-    License.value = licenseData
-    // initialize the GraphComponent
-    const gc = new GraphComponent()
-    // configure an input mode for out of the box editing
-    gc.inputMode = new GraphEditorInputMode()
-    // create some graph elements
-    createSampleGraph(gc.graph)
-    return gc
-  }, [])
+  // all stores
+  const { layout } = useSideBarStore();
+  const networkData = useNetworkStore((state) => state.networkData);
+  const {
+    duration,
+    edgeToEdge,
+    nodeToNode,
+    nodeToEdge,
+    layerToLayer,
+    orientation: hierarchicalOrientation,
+  } = useHierarchicalSideBarStore();
+  const {
+    preferredEdgeLength,
+    minimumNodeDistance,
+    avoidNodeEdgeOverlap,
+    compactness,
+    orientation: organicOrientation,
+    clustering,
+  } = useOrganicSideBarStore();
+  const { gridSpacing, layoutMode } = useOrthogonalSideBarStore();
+  const { partitioningPolicy, useDrawingAsSketch } = useCircularSideBarStore();
+  const { orientation: treeOrientation } = useTreeSideBarStore();
+
+  const layoutConfig = {
+    
+    nodeDistance: nodeToNode,
+    nodeToEdgeDistance: nodeToEdge,
+    edgeDistance: edgeToEdge,
+    minimumLayerDistance: layerToLayer,
+    stopDuration: duration,
+    layoutOrientation: hierarchicalOrientation,
+    
+    preferredEdgeLength,
+    minimumNodeDistance,
+    avoidNodeEdgeOverlap,
+    compactness: compactness / 100, 
+    organicOrientation,
+    clustering,
+    
+    gridSpacing,
+    layoutMode,
+    
+    partitioningPolicy,
+    fromSketchMode: useDrawingAsSketch,
+    
+    treeOrientation,
+  };
 
   useLayoutEffect(() => {
-    const gcContainer = graphComponentContainer.current!
-    gcContainer.appendChild(graphComponent.htmlElement)
-    return () => {
-      gcContainer.innerHTML = ''
+    if (!graphComponentContainer.current) return;
+
+    if (!graphComponentRef.current) {
+      License.value = licenseData;
+      const gc = new GraphComponent();
+      const inputMode = new GraphViewerInputMode();
+      gc.inputMode = inputMode;
+      gc.minimumZoom = 0.3;
+      gc.maximumZoom = 3.0;
+
+      graphComponentRef.current = gc;
+      graphComponentContainer.current.appendChild(gc.htmlElement);
+
+      LayoutExecutor.ensure();
+      initializeToolTips(inputMode);
     }
-  }, [graphComponentContainer, graphComponent])
+
+    const graphComponent = graphComponentRef.current!;
+
+    createSampleGraph(graphComponent.graph, layout, layoutConfig, networkData);
+
+    graphComponent.graph.nodes.forEach((node) => {
+      const { label, labelText, labelParameter } = node.tag || {};
+      if (showLabels && !label) {
+        const newLabel = graphComponent.graph.addLabel({
+          owner: node,
+          text: labelText,
+          layoutParameter: labelParameter,
+        });
+        node.tag.label = newLabel;
+      } else if (!showLabels && label) {
+        graphComponent.graph.remove(label);
+        node.tag.label = null;
+      }
+    });
+
+    graphComponent.fitGraphBounds();
+    graphComponent.invalidate();
+    
+    return () => {
+      if (graphComponentRef.current && graphComponentContainer.current) {
+        graphComponentContainer.current.removeChild(graphComponentRef.current.htmlElement);
+        graphComponentRef.current = null;
+      }
+    };
+  }, [
+    showLabels,
+    layout,
+    // Hierarchical 
+    duration,
+    edgeToEdge,
+    nodeToNode,
+    nodeToEdge,
+    layerToLayer,
+    hierarchicalOrientation,
+    // Organic
+    preferredEdgeLength,
+    minimumNodeDistance,
+    avoidNodeEdgeOverlap,
+    compactness,
+    organicOrientation,
+    clustering,
+    // Orthogonal 
+    gridSpacing,
+    layoutMode,
+    // Circular
+    partitioningPolicy,
+    useDrawingAsSketch,
+    // Tree 
+    treeOrientation,
+
+    networkData,
+  ]);
 
   return (
-    <div
-      className="graph-component-container"
-      style={{ width: '500px', height: '500px' }}
-      ref={graphComponentContainer}
-    />
-  )
-}
+    <div className="px-2 pt-2 pb-2">
+      <div className="graph-component-container" ref={graphComponentContainer} />
+      <div className="absolute bottom-4 left-4">
+        <Inventory />
+      </div>
+    </div>
+);}

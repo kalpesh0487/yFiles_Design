@@ -1,0 +1,204 @@
+- LayOut Data
+  - Hierarchical
+    - layout
+      - Hierarchical
+    - Sample Graph
+      - default
+      - grouping
+      - bus structures
+      - sub components
+      - registration flowchart
+      - order fulfilment table
+      - BPMN job posting
+    - Presets
+      - default
+      - curves
+      - Incremental
+      - flowchart
+    - Collapsers
+      - General
+        - orientation
+          - left to right
+          - top to bottom
+          - bottom to top
+          - right to left
+        - layout components separately
+          - true
+          - false
+        - layout sub-components separatly
+          - true
+          - false
+        - symmetric placement
+          - true
+          - false
+        - stop duration
+          - 1 to 100
+        - node to node distance
+          - 1 to 100
+        - node to node distance
+          - 1 to 100
+        - node to edge distance
+          - 1 to 100
+        - edge to edge distance
+          - 1 to 100
+        - layer to layer distance
+          - 1 to 100
+        - selected elements incrementally
+          - true
+          - false
+        - use drawing as sketch
+          - true
+          - false
+      - Edges
+        - edge style
+          - straight 
+          - curved
+        - arrow size
+          - number
+      - Labelling
+        - show node labels
+          - true
+          - false
+        - font size
+          - number
+  
+  - Organic
+    - layout
+      - Organic
+    - Sample Graph
+      - default
+      - Mesh
+      - sub structures
+      - disk structures
+      - computer network
+    - Presets
+      - default
+      - substructures
+      - clustered substructures
+      - clustered
+    - Collapsers
+      - General
+        - scope
+          - all
+          - selection
+          - selection and connected nodes
+          - selection and nearby nodes
+        - preferred edge length
+          - 1 to 100
+        - minimum node distance
+          - 1 to 100
+        - avoid node/edge overlap
+          - true
+          - false
+        - compactness
+          - 1 to 100
+        - orientation
+          - none
+          - top to bottom
+          - left to right
+          - bottom to top
+          - right to left
+        - clustering
+          - none
+          - edge betweenness
+          - label propagation
+          - louvain modularity
+      - Edges
+        - edge style
+          - straight 
+          - curved
+        - arrow size
+          - number
+      - Labelling
+
+  - Orthogonal
+    - layout
+      - Orthogonal
+    - Sample Graph
+      - default
+      - sub structures
+      - modified graph
+    - Presets
+      - default
+      - substructures
+    - Collapsers
+      - General
+        - layout mode
+          - strict
+          - relaxed
+          - forced straight line
+        - grid spacing
+          - 1 to 100
+      - Edges
+        - edge style
+          - straight 
+          - curved
+        - arrow size
+          - number
+      - Labelling
+      
+  - Circular
+    - layout
+      - Circular
+    - Sample Graph
+      - default
+      - social network
+      - sub structures
+      - modified structures
+    - Presets
+      - default
+      - single cycle bundled
+      - sub structures
+    - Collapsers
+      - General
+        - parttioning policy
+          - BCC Compact
+          - BCC Isolated
+          - custom groups 
+          - single cycle
+        - act on selection only
+          - true
+          - false
+        - use drawing as sketch
+          - true
+          - false
+      - Edges
+        - edge style
+          - straight 
+          - curved
+        - arrow size
+          - number
+      - Labelling
+
+  - Tree
+    - layout
+      - Tree
+    - Sample Graph
+      - Default
+      - Multi-Parent Tree
+      - Organization chart
+      - Mindmap
+    - Presets
+      - Default
+      - Compact
+      - Mindmap
+    - Collapsers
+      - General
+        - Orientation
+          - Top to Bottom
+          - Bottom to Top
+          - Left to Right
+          - Right to Left
+        - act on selection only
+          - true
+          - false
+      - Edges
+        - edge style
+          - straight 
+          - curved
+        - arrow size
+          - number
+      - Labelling
+
+
+      
