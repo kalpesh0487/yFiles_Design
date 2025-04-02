@@ -11,6 +11,11 @@ const OrthogonalSidebar = () => {
     gridSpacing,
     edgeStyle,
     arrowSize,
+    // New edge properties
+    minimumFirstSegmentLengthOrthogonal,
+    minimumSegmentLength,
+    minimumLastSegmentLengthOrthogonal,
+    routeSelectedEdgesDownwards,
     toggleGeneral,
     toggleEdges,
     toggleLabelling,
@@ -20,6 +25,10 @@ const OrthogonalSidebar = () => {
     setGridSpacing,
     setEdgeStyle,
     setArrowSize,
+    setMinimumFirstSegmentLengthOrthogonal,
+    setMinimumSegmentLength,
+    setMinimumLastSegmentLengthOrthogonal,
+    toggleRouteSelectedEdgesDownwards,
   } = useOrthogonalSideBarStore();
 
   return (
@@ -33,7 +42,6 @@ const OrthogonalSidebar = () => {
         >
           <option>Default</option>
           <option>Sub Structures</option>
-          {/* <option>modified graph</option> */}
         </select>
       </div>
 
@@ -52,7 +60,6 @@ const OrthogonalSidebar = () => {
       </div>
 
       <div>
-        {/* General Panel */}
         <div className="border-b">
           <button onClick={toggleGeneral} className="w-full flex items-center py-1 text-md">
             <span className={`transform transition-transform text-xl font-bold ${isGeneralOpen ? 'rotate-90' : ''}`}>
@@ -96,7 +103,6 @@ const OrthogonalSidebar = () => {
           )}
         </div>
 
-        {/* Edges Panel */}
         <div className="border-b">
           <button onClick={toggleEdges} className="w-full flex items-center py-1 text-md">
             <span className={`transform transition-transform text-xl font-bold ${isEdgesOpen ? 'rotate-90' : ''}`}>
@@ -108,24 +114,59 @@ const OrthogonalSidebar = () => {
           {isEdgesOpen && (
             <div className="pb-4">
               <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-700">Edge Style:</span>
-                  <select
-                    value={edgeStyle}
-                    onChange={(e) => setEdgeStyle(e.target.value)}
-                    className="p-1 border rounded"
-                  >
-                    <option>straight</option>
-                    <option>curved</option>
-                  </select>
+                <div className="flex flex-col">
+                  <span className="text-sm ">Minimum First Segment Length:</span>
+                  <div className="flex items-center justify-between">
+                    <input
+                      type="range"
+                      min="1"
+                      max="100"
+                      value={minimumFirstSegmentLengthOrthogonal}
+                      onChange={(e) => setMinimumFirstSegmentLengthOrthogonal(Number(e.target.value))}
+                      className="w-full"
+                    />
+                    <span className="ml-3">{minimumFirstSegmentLengthOrthogonal}</span>
+                  </div>
                 </div>
+
+                
+                <div className="flex flex-col">
+                  <span className="text-sm ">Minimum Segment Length:</span>
+                  <div className="flex items-center justify-between">
+                    <input
+                      type="range"
+                      min="1"
+                      max="100"
+                      value={minimumSegmentLength}
+                      onChange={(e) => setMinimumSegmentLength(Number(e.target.value))}
+                      className="w-full"
+                    />
+                    <span className="ml-3">{minimumSegmentLength}</span>
+                  </div>
+                </div>
+
+                <div className="flex flex-col">
+                  <span className="text-sm ">Minimum Last Segment Length:</span>
+                  <div className="flex items-center justify-between">
+                    <input
+                      type="range"
+                      min="1"
+                      max="100"
+                      value={minimumLastSegmentLengthOrthogonal}
+                      onChange={(e) => setMinimumLastSegmentLengthOrthogonal(Number(e.target.value))}
+                      className="w-full"
+                    />
+                    <span className="ml-3">{minimumLastSegmentLengthOrthogonal}</span>
+                  </div>
+                </div>
+
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-700">Arrow Size:</span>
+                  <span className="text-sm ">Route Selected Edges Downwards:</span>
                   <input
-                    type="number"
-                    value={arrowSize}
-                    onChange={(e) => setArrowSize(Number(e.target.value))}
-                    className="w-20 p-1 border rounded"
+                    type="checkbox"
+                    checked={routeSelectedEdgesDownwards}
+                    onChange={toggleRouteSelectedEdgesDownwards}
+                    className="h-4 w-4"
                   />
                 </div>
               </div>
@@ -133,7 +174,6 @@ const OrthogonalSidebar = () => {
           )}
         </div>
 
-        {/* Labelling Panel */}
         <div className="border-b">
           <button onClick={toggleLabelling} className="w-full flex items-center py-1 text-md">
             <span className={`transform transition-transform text-xl font-bold ${isLabellingOpen ? 'rotate-90' : ''}`}>
@@ -147,14 +187,14 @@ const OrthogonalSidebar = () => {
               <div className="space-y-3">
                 <div className="flex items-center">
                   <input type="checkbox" className="h-4 w-4" />
-                  <label className="ml-2 text-sm text-gray-700">Show Node Labels</label>
+                  <label className="ml-2 text-sm ">Show Node Labels</label>
                 </div>
                 <div className="flex items-center">
                   <input type="checkbox" className="h-4 w-4" />
-                  <label className="ml-2 text-sm text-gray-700">Show Edge Labels</label>
+                  <label className="ml-2 text-sm ">Show Edge Labels</label>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-700">Font Size:</span>
+                  <span className="text-sm ">Font Size:</span>
                   <input type="number" className="w-20 p-1 border rounded" defaultValue={12} />
                 </div>
               </div>

@@ -10,8 +10,9 @@ const CircularSidebar = () => {
     partitioningPolicy,
     actOnSelectionOnly,
     useDrawingAsSketch,
-    edgeStyle,
-    arrowSize,
+    enableEdgeBundling,
+    bundlingStrength,
+    edgeRoutingStyle,
     toggleGeneral,
     toggleEdges,
     toggleLabelling,
@@ -20,8 +21,9 @@ const CircularSidebar = () => {
     setPartitioningPolicy,
     toggleActOnSelectionOnly,
     toggleUseDrawingAsSketch,
-    setEdgeStyle,
-    setArrowSize,
+    toggleEnableEdgeBundling,
+    setBundlingStrength,
+    setEdgeRoutingStyle,
   } = useCircularSideBarStore();
 
   return (
@@ -56,7 +58,6 @@ const CircularSidebar = () => {
       </div>
 
       <div>
-        {/* General Panel */}
         <div className="border-b">
           <button onClick={toggleGeneral} className="w-full flex items-center py-1 text-md">
             <span className={`transform transition-transform text-xl font-bold ${isGeneralOpen ? 'rotate-90' : ''}`}>
@@ -105,7 +106,6 @@ const CircularSidebar = () => {
           )}
         </div>
 
-        {/* Edges Panel */}
         <div className="border-b">
           <button onClick={toggleEdges} className="w-full flex items-center py-1 text-md">
             <span className={`transform transition-transform text-xl font-bold ${isEdgesOpen ? 'rotate-90' : ''}`}>
@@ -117,32 +117,51 @@ const CircularSidebar = () => {
           {isEdgesOpen && (
             <div className="pb-4">
               <div className="space-y-3">
+                
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-700">Edge Style:</span>
+                  <span className="text-sm ">Enable Edge Bundling:</span>
+                  <input
+                    type="checkbox"
+                    checked={enableEdgeBundling}
+                    onChange={toggleEnableEdgeBundling}
+                    className="h-4 w-4"
+                  />
+                </div>
+
+                <div className="flex flex-col">
+                  <span className="text-sm ">Bundling Strength:</span>
+                  <div className="flex items-center justify-between">
+                    <input
+                      type="range"
+                      min="0"
+                      max="1"
+                      step="0.01"
+                      value={bundlingStrength}
+                      onChange={(e) => setBundlingStrength(Number(e.target.value))}
+                      className="w-full"
+                    />
+                    <span className="ml-3">{bundlingStrength.toFixed(2)}</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <span className="text-sm ">Edge Routing Style:</span>
                   <select
-                    value={edgeStyle}
-                    onChange={(e) => setEdgeStyle(e.target.value)}
+                    value={edgeRoutingStyle}
+                    onChange={(e) => setEdgeRoutingStyle(e.target.value)}
                     className="p-1 border rounded"
                   >
-                    <option>straight</option>
-                    <option>curved</option>
+                    <option>Inside</option>
+                    <option>Outside</option>
+                    <option>Automatic</option>
+                    <option>Select Edge Outside</option>
                   </select>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-700">Arrow Size:</span>
-                  <input
-                    type="number"
-                    value={arrowSize}
-                    onChange={(e) => setArrowSize(Number(e.target.value))}
-                    className="w-20 p-1 border rounded"
-                  />
                 </div>
               </div>
             </div>
           )}
         </div>
 
-        {/* Labelling Panel */}
         <div className="border-b">
           <button onClick={toggleLabelling} className="w-full flex items-center py-1 text-md">
             <span className={`transform transition-transform text-xl font-bold ${isLabellingOpen ? 'rotate-90' : ''}`}>
@@ -156,14 +175,14 @@ const CircularSidebar = () => {
               <div className="space-y-3">
                 <div className="flex items-center">
                   <input type="checkbox" className="h-4 w-4" />
-                  <label className="ml-2 text-sm text-gray-700">Show Node Labels</label>
+                  <label className="ml-2 text-sm ">Show Node Labels</label>
                 </div>
                 <div className="flex items-center">
                   <input type="checkbox" className="h-4 w-4" />
-                  <label className="ml-2 text-sm text-gray-700">Show Edge Labels</label>
+                  <label className="ml-2 text-sm ">Show Edge Labels</label>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-700">Font Size:</span>
+                  <span className="text-sm ">Font Size:</span>
                   <input type="number" className="w-20 p-1 border rounded" defaultValue={12} />
                 </div>
               </div>

@@ -1,11 +1,9 @@
 import { 
-  BezierEdgeStyle,
   ExteriorNodeLabelModel, 
   HierarchicalLayout, 
   OrthogonalLayout,
   IGraph, 
   ImageNodeStyle, 
-  Rect,
   Stroke, 
   CircularLayout,
   OrganicLayout,
@@ -15,6 +13,8 @@ import {
   LayoutOrientation,
   OrganicLayoutClusteringPolicy,
   CircularLayoutPartitioningPolicy,
+  HierarchicalLayoutRoutingStyle,
+  RecursiveEdgePolicy,
 } from '@yfiles/yfiles';
 import backhaulIcon from '../assets/Internet Cloud.png';
 import switchHalfGreen from '../assets/Red-4 5.png';
@@ -27,13 +27,29 @@ import WAN from '../assets/Internet Cloud (2).png';
 import { NetworkData } from '../types/types';
 
 interface LayoutConfig {
-  
+  // Hierarchical nodes
   nodeDistance?: number;
   nodeToEdgeDistance?: number;
   edgeDistance?: number;
   minimumLayerDistance?: number;
   stopDuration?: number;
   layoutOrientation?: string;
+  // Hierarchical edges
+  edgeRoutingStyle?: HierarchicalLayoutRoutingStyle | string;
+  backloopRouting?: boolean;
+  automaticEdgeGrouping?: boolean;
+  automaticBusRouting?: boolean;
+  highlightCriticalPath?: boolean;
+  minimumFirstSegmentLength?: number;
+  minimumLastSegmentLength?: number;
+  minimumEdgeLength?: number;
+  minimumEdgeDistance?: number;
+  minimumSlope?: number;
+  arrowsDefineEdgeDirection?: boolean;
+  considerEdgeThickness?: boolean;
+  recursiveEdgeRoutingStyle?: RecursiveEdgePolicy | string;
+  uTurnSymmetry?: number;
+  allowShortcuts?: boolean;
   
   preferredEdgeLength?: number;
   minimumNodeDistance?: number;
@@ -42,8 +58,14 @@ interface LayoutConfig {
   organicOrientation?: string;
   clustering?: string;
   
+  // Orthogonal general
   gridSpacing?: number;
   layoutMode?: string;
+  // Orthogonal edges
+  minimumFirstSegmentLengthOrthogonal?: number;
+  minimumSegmentLength?: number;
+  minimumLastSegmentLengthOrthogonal?: number;
+  routeSelectedEdgesDownwards?: boolean;
   
   partitioningPolicy?: string;
   fromSketchMode?: boolean;
@@ -88,12 +110,44 @@ function mapPartitioningPolicy(policy: string): CircularLayoutPartitioningPolicy
       return CircularLayoutPartitioningPolicy.BCC_COMPACT;
     case 'BCC Isolated':
       return CircularLayoutPartitioningPolicy.BCC_ISOLATED;
-    // case 'Custom Groups':
-    //   return CircularLayoutPartitioningPolicy.CUSTOM_GROUPS;
     case 'Single Cycle':
       return CircularLayoutPartitioningPolicy.SINGLE_CYCLE;
     default:
       return CircularLayoutPartitioningPolicy.BCC_COMPACT;
+  }
+}
+
+function mapEdgeRoutingStyle(style: HierarchicalLayoutRoutingStyle | string | undefined): HierarchicalLayoutRoutingStyle {
+  if (typeof style !== 'string') {
+    return style ?? HierarchicalLayoutRoutingStyle.ORTHOGONAL; 
+  }
+  switch (style) {
+    case 'Orthogonal':
+      return HierarchicalLayoutRoutingStyle.ORTHOGONAL;
+    case 'Octilinear':
+      return HierarchicalLayoutRoutingStyle.OCTILINEAR;
+    case 'Polyline':
+      return HierarchicalLayoutRoutingStyle.POLYLINE;
+    case 'Curved':
+      return HierarchicalLayoutRoutingStyle.CURVED;
+    default:
+      return HierarchicalLayoutRoutingStyle.ORTHOGONAL;
+  }
+}
+
+function mapRecursiveEdgePolicy(policy: RecursiveEdgePolicy | string | undefined): RecursiveEdgePolicy {
+  if (typeof policy !== 'string') {
+    return policy ?? RecursiveEdgePolicy.UNDIRECTED;
+  }
+  switch (policy) {
+    case 'Off':
+      return RecursiveEdgePolicy.UNDIRECTED;
+    case 'Directed':
+      return RecursiveEdgePolicy.DIRECTED;
+    case 'Undirected':
+      return RecursiveEdgePolicy.UNDIRECTED;
+     default:
+       return RecursiveEdgePolicy.UNDIRECTED;
   }
 }
 
@@ -139,15 +193,42 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
     
     if (sourceNode && targetNode) {
       const graphEdge = graph.createEdge(sourceNode, targetNode);
-      const edgeStyle = new PolylineEdgeStyle({
-        smoothingLength: 50,
-      });
-      
-      edgeStyle.stroke = new Stroke({
-        fill: edge.color || '#000000',
-        thickness: 2.4,
-        dashStyle: edge.dashed ? 'dash' : 'solid',
-      });
+      let edgeStyle: PolylineEdgeStyle;
+
+      if (layout === 'Hierarchical') {
+        edgeStyle = new PolylineEdgeStyle({
+          smoothingLength: 30,
+        });
+
+        edgeStyle.stroke = new Stroke({
+          fill: edge.color || '#000000',
+          thickness: config.considerEdgeThickness ? 2.0 : 1.0,
+          dashStyle: edge.dashed ? 'dash' : 'solid',
+        });
+        if (config.arrowsDefineEdgeDirection) {
+          edgeStyle.targetArrow = 'default';
+        }
+      } else if (layout === 'Orthogonal') {
+        edgeStyle = new PolylineEdgeStyle({
+          smoothingLength: 10,
+        });
+
+        edgeStyle.stroke = new Stroke({
+          fill: edge.color || '#000000',
+          thickness: 2.4, 
+          dashStyle: edge.dashed ? 'dash' : 'solid',
+        });
+      } else {
+        edgeStyle = new PolylineEdgeStyle({
+          smoothingLength: 30,
+        });
+        
+        edgeStyle.stroke = new Stroke({
+          fill: edge.color || '#000000',
+          thickness: 2.4,
+          dashStyle: edge.dashed ? 'dash' : 'solid',
+        });
+      }
 
       graph.setStyle(graphEdge, edgeStyle);
 
@@ -158,7 +239,7 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
           backgroundStroke: new Stroke({
             fill: '#000000',
             thickness: 1.8,
-            dashStyle: 'dash'  
+            dashStyle: 'dash',
           }),
           padding: [5, 5, 5, 5],
           textSize: 10,
@@ -178,11 +259,27 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
       edgeDistance: config.edgeDistance || 17,
       minimumLayerDistance: config.minimumLayerDistance || 5,
       stopDuration: config.stopDuration,
+      defaultEdgeDescriptor: {
+        routingStyleDescriptor: {
+          defaultRoutingStyle: mapEdgeRoutingStyle(config.edgeRoutingStyle),
+        },
+        backLoopRouting: config.backloopRouting || false,
+        minimumFirstSegmentLength: config.minimumFirstSegmentLength || 10,
+        minimumLastSegmentLength: config.minimumLastSegmentLength || 10,
+        minimumLength: config.minimumEdgeLength || 10,
+        minimumDistance: config.minimumEdgeDistance || 10,
+        recursiveEdgePolicy: mapRecursiveEdgePolicy(config.recursiveEdgeRoutingStyle),
+      },
     });
   } else if (layout === 'Orthogonal') {
     layoutAlgorithm = new OrthogonalLayout({
       gridSpacing: config.gridSpacing || 30,
       layoutMode: config.layoutMode === 'Forced Straight Line' ? 'forced-straight-line' : config.layoutMode === 'Relaxed' ? 'relaxed' : 'strict',
+      defaultEdgeDescriptor: {
+        minimumFirstSegmentLength: config.minimumFirstSegmentLengthOrthogonal || 10,
+        minimumSegmentLength: config.minimumSegmentLength || 10,
+        minimumLastSegmentLength: config.minimumLastSegmentLengthOrthogonal || 10,
+      },
     });
   } else if (layout === 'Circular') {
     layoutAlgorithm = new CircularLayout({

@@ -49,12 +49,51 @@
         - use drawing as sketch
           - true
           - false
+      
       - Edges
-        - edge style
-          - straight 
-          - curved
-        - arrow size
-          - number
+        - edge routing style
+          - Orthogonal 
+          - Octilinear
+          - Polyline
+          - Curved
+        - Backloop Routing
+          - true
+          - false
+        - Automatic Edge Grouping
+          - true
+          - false
+        - Automatic Bus Routing
+          - true
+          - false
+        - Highlight Critical Path
+          - true
+          - false
+        - Minimum First Segment Length
+          - range 1 to 100
+        - Minimum Last Segment Length
+          - range 1 to 100
+        - Minimum Edge Length
+          - range 1 to 100
+        - Minimum Edge Distance 
+          - range 1 to 100
+        - Minimum Slope 
+          - range 1 to 100
+        - Arrows Define Edge Direction
+          - true
+          - false
+        - Consider Edge Thickness 
+          - true
+          - false
+        - Recursive Edge Routing Style
+          - off
+          - Directed
+          - Undirected
+        - U-turn Symmetry
+          - range 1 to 100
+        - Allow Shortcuts
+          - true
+          - false
+      
       - Labelling
         - show node labels
           - true
@@ -103,12 +142,7 @@
           - edge betweenness
           - label propagation
           - louvain modularity
-      - Edges
-        - edge style
-          - straight 
-          - curved
-        - arrow size
-          - number
+      
       - Labelling
 
   - Orthogonal
@@ -129,12 +163,18 @@
           - forced straight line
         - grid spacing
           - 1 to 100
+      
       - Edges
-        - edge style
-          - straight 
-          - curved
-        - arrow size
-          - number
+        - Minimum First Segment Length
+          - range 1 to 100 
+        - Minimum Segment Length
+          - range 1 to 100
+        - Minimum Last Segment Length
+          - range 1 to 100
+        - Route Selected Edges Downwards
+          - true
+          - false
+      
       - Labelling
       
   - Circular
@@ -162,12 +202,19 @@
         - use drawing as sketch
           - true
           - false
+      
       - Edges
-        - edge style
-          - straight 
-          - curved
-        - arrow size
-          - number
+        - Enable Edge Bundling
+          - true 
+          - false
+        - Bundling Strength
+          - 0 to 1
+        - Edge Routing Style
+          - Inside
+          - Outside
+          - Automatic
+          - Select Edge Outside
+      
       - Labelling
 
   - Tree
@@ -192,12 +239,20 @@
         - act on selection only
           - true
           - false
+      
       - Edges
-        - edge style
-          - straight 
-          - curved
-        - arrow size
-          - number
+        - Port Assignment
+          - None 
+          - Distributed Top
+          - Distributed Bottom
+          - Distributed Left
+          - Distributed Right
+        - Routing Style for Non-Tree Edges
+          - Orthogonal
+          - Organic
+          - Straight-Line
+          - Bundled
+      
       - Labelling
 
 

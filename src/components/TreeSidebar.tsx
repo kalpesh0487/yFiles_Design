@@ -9,8 +9,8 @@ const TreeSidebar = () => {
     preset,
     orientation,
     actOnSelectionOnly,
-    edgeStyle,
-    arrowSize,
+    portAssignment,
+    routingStyleForNonTreeEdges,
     toggleGeneral,
     toggleEdges,
     toggleLabelling,
@@ -18,8 +18,8 @@ const TreeSidebar = () => {
     setPreset,
     setOrientation,
     toggleActOnSelectionOnly,
-    setEdgeStyle,
-    setArrowSize,
+    setPortAssignment,
+    setRoutingStyleForNonTreeEdges,
   } = useTreeSideBarStore();
 
   return (
@@ -54,7 +54,6 @@ const TreeSidebar = () => {
       </div>
 
       <div>
-        {/* General Panel */}
         <div className="border-b">
           <button onClick={toggleGeneral} className="w-full flex items-center py-1 text-md">
             <span className={`transform transition-transform text-xl font-bold ${isGeneralOpen ? 'rotate-90' : ''}`}>
@@ -94,7 +93,6 @@ const TreeSidebar = () => {
           )}
         </div>
 
-        {/* Edges Panel */}
         <div className="border-b">
           <button onClick={toggleEdges} className="w-full flex items-center py-1 text-md">
             <span className={`transform transition-transform text-xl font-bold ${isEdgesOpen ? 'rotate-90' : ''}`}>
@@ -107,31 +105,38 @@ const TreeSidebar = () => {
             <div className="pb-4">
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-700">Edge Style:</span>
+                  <span className="text-sm ">Port Assignment:</span>
                   <select
-                    value={edgeStyle}
-                    onChange={(e) => setEdgeStyle(e.target.value)}
+                    value={portAssignment}
+                    onChange={(e) => setPortAssignment(e.target.value)}
                     className="p-1 border rounded"
                   >
-                    <option>straight</option>
-                    <option>curved</option>
+                    <option>None</option>
+                    <option>Distributed Top</option>
+                    <option>Distributed Bottom</option>
+                    <option>Distributed Left</option>
+                    <option>Distributed Right</option>
                   </select>
                 </div>
+
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-700">Arrow Size:</span>
-                  <input
-                    type="number"
-                    value={arrowSize}
-                    onChange={(e) => setArrowSize(Number(e.target.value))}
-                    className="w-20 p-1 border rounded"
-                  />
+                  <span className="text-sm ">Routing Style for Non-Tree Edges:</span>
+                  <select
+                    value={routingStyleForNonTreeEdges}
+                    onChange={(e) => setRoutingStyleForNonTreeEdges(e.target.value)}
+                    className="p-1 border rounded"
+                  >
+                    <option>Orthogonal</option>
+                    <option>Organic</option>
+                    <option>Straight-Line</option>
+                    <option>Bundled</option>
+                  </select>
                 </div>
               </div>
             </div>
           )}
         </div>
 
-        {/* Labelling Panel */}
         <div className="border-b">
           <button onClick={toggleLabelling} className="w-full flex items-center py-1 text-md">
             <span className={`transform transition-transform text-xl font-bold ${isLabellingOpen ? 'rotate-90' : ''}`}>
@@ -145,14 +150,14 @@ const TreeSidebar = () => {
               <div className="space-y-3">
                 <div className="flex items-center">
                   <input type="checkbox" className="h-4 w-4" />
-                  <label className="ml-2 text-sm text-gray-700">Show Node Labels</label>
+                  <label className="ml-2 text-sm ">Show Node Labels</label>
                 </div>
                 <div className="flex items-center">
                   <input type="checkbox" className="h-4 w-4" />
-                  <label className="ml-2 text-sm text-gray-700">Show Edge Labels</label>
+                  <label className="ml-2 text-sm ">Show Edge Labels</label>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-700">Font Size:</span>
+                  <span className="text-sm ">Font Size:</span>
                   <input type="number" className="w-20 p-1 border rounded" defaultValue={12} />
                 </div>
               </div>
@@ -161,7 +166,6 @@ const TreeSidebar = () => {
         </div>
       </div>
 
-      {/* Save and Preview buttons at the bottom */}
       <div className="flex justify-between my-2 mt-4">
         <div className="border p-1 rounded-lg px-2 cursor-pointer">Preview</div>
         <div className="border p-1 rounded-lg px-2 bg-[#1E1E1E] cursor-pointer text-white">Save Settings</div>

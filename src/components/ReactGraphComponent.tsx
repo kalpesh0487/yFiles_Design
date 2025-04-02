@@ -23,7 +23,6 @@ export function ReactGraphComponent() {
   const graphComponentRef = useRef<GraphComponent | null>(null);
   const [showLabels, setShowLabels] = useState(false);
 
-  // all stores
   const { layout } = useSideBarStore();
   const networkData = useNetworkStore((state) => state.networkData);
   const {
@@ -33,6 +32,21 @@ export function ReactGraphComponent() {
     nodeToEdge,
     layerToLayer,
     orientation: hierarchicalOrientation,
+    edgeRoutingStyle,
+    backloopRouting,
+    automaticEdgeGrouping,
+    automaticBusRouting,
+    highlightCriticalPath,
+    minimumFirstSegmentLength,
+    minimumLastSegmentLength,
+    minimumEdgeLength,
+    minimumEdgeDistance,
+    minimumSlope,
+    arrowsDefineEdgeDirection,
+    considerEdgeThickness,
+    recursiveEdgeRoutingStyle,
+    uTurnSymmetry,
+    allowShortcuts,
   } = useHierarchicalSideBarStore();
   const {
     preferredEdgeLength,
@@ -42,32 +56,60 @@ export function ReactGraphComponent() {
     orientation: organicOrientation,
     clustering,
   } = useOrganicSideBarStore();
-  const { gridSpacing, layoutMode } = useOrthogonalSideBarStore();
+  const { 
+    gridSpacing, 
+    layoutMode, 
+    minimumFirstSegmentLengthOrthogonal,
+    minimumSegmentLength,
+    minimumLastSegmentLengthOrthogonal,
+    routeSelectedEdgesDownwards,
+  } = useOrthogonalSideBarStore();
   const { partitioningPolicy, useDrawingAsSketch } = useCircularSideBarStore();
   const { orientation: treeOrientation } = useTreeSideBarStore();
 
   const layoutConfig = {
-    
+    // Hierarchical nodes
     nodeDistance: nodeToNode,
     nodeToEdgeDistance: nodeToEdge,
     edgeDistance: edgeToEdge,
     minimumLayerDistance: layerToLayer,
     stopDuration: duration,
     layoutOrientation: hierarchicalOrientation,
-    
+    // Hierarchical edges
+    edgeRoutingStyle,
+    backloopRouting,
+    automaticEdgeGrouping,
+    automaticBusRouting,
+    highlightCriticalPath,
+    minimumFirstSegmentLength,
+    minimumLastSegmentLength,
+    minimumEdgeLength,
+    minimumEdgeDistance,
+    minimumSlope,
+    arrowsDefineEdgeDirection,
+    considerEdgeThickness,
+    recursiveEdgeRoutingStyle,
+    uTurnSymmetry,
+    allowShortcuts,
+    // Organic
     preferredEdgeLength,
     minimumNodeDistance,
     avoidNodeEdgeOverlap,
-    compactness: compactness / 100, 
+    compactness: compactness / 100,
     organicOrientation,
     clustering,
-    
+    // Orthogonal general
     gridSpacing,
     layoutMode,
-    
+    // Orthogonal edges
+    minimumFirstSegmentLengthOrthogonal,
+    minimumSegmentLength,
+    minimumLastSegmentLengthOrthogonal,
+    routeSelectedEdgesDownwards,
+    // Circular
     partitioningPolicy,
     fromSketchMode: useDrawingAsSketch,
-    
+    // Tree
     treeOrientation,
   };
 
@@ -120,13 +162,29 @@ export function ReactGraphComponent() {
   }, [
     showLabels,
     layout,
-    // Hierarchical 
+    // Hierarchical nodes
     duration,
     edgeToEdge,
     nodeToNode,
     nodeToEdge,
     layerToLayer,
     hierarchicalOrientation,
+    // Hierarchical edges
+    edgeRoutingStyle,
+    backloopRouting,
+    automaticEdgeGrouping,
+    automaticBusRouting,
+    highlightCriticalPath,
+    minimumFirstSegmentLength,
+    minimumLastSegmentLength,
+    minimumEdgeLength,
+    minimumEdgeDistance,
+    minimumSlope,
+    arrowsDefineEdgeDirection,
+    considerEdgeThickness,
+    recursiveEdgeRoutingStyle,
+    uTurnSymmetry,
+    allowShortcuts,
     // Organic
     preferredEdgeLength,
     minimumNodeDistance,
@@ -137,12 +195,15 @@ export function ReactGraphComponent() {
     // Orthogonal 
     gridSpacing,
     layoutMode,
+    minimumFirstSegmentLengthOrthogonal,
+    minimumSegmentLength,
+    minimumLastSegmentLengthOrthogonal,
+    routeSelectedEdgesDownwards,
     // Circular
     partitioningPolicy,
     useDrawingAsSketch,
     // Tree 
     treeOrientation,
-
     networkData,
   ]);
 
@@ -153,4 +214,5 @@ export function ReactGraphComponent() {
         <Inventory />
       </div>
     </div>
-);}
+  );
+}

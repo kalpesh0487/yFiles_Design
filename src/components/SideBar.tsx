@@ -15,12 +15,12 @@ const SideBar = () => {
 
   return (
     <div
-      className={`absolute right-3 top-0 rounded-md my-3 h-[99vh] border bg-white border-l-2 shadow-lg p-4 pt-4 transition-all duration-300 ${
+      className={`absolute right-3 top-0 rounded-md my-3 h-[99vh] overflow-scroll border bg-white border-l-2 shadow-lg p-4 pt-4 transition-all duration-300 ${
         isCollapsed ? 'w-[40px] overflow-hidden' : 'w-85'
       }`}
     >
       <div
-        className={`absolute ${isCollapsed ? `z-40 left-[7px]` : `left-[-12px]`} top-6 transform -translate-y-1/2 bg-slate-200 w-6 h-6 rounded-full flex items-center justify-center cursor-pointer border font-semibold border-black shadow-lg`}
+        className={`absolute hover:scale-115 transition-all ${isCollapsed ? `z-40 left-[7px]` : `left-[15px]`} top-7.5 transform -translate-y-1/2 bg-slate-200 w-6 h-6 rounded-full flex items-center justify-center cursor-pointer border font-semibold border-black shadow-lg`}
         onClick={toggleCollapse}
       >
         {isCollapsed ? '<' : '>'}
@@ -29,7 +29,7 @@ const SideBar = () => {
       {!isCollapsed && (
         <>
           <div className="flex">
-            <h2 className="text-xl text-black mb-3 ml-2">TOPOLOGY SETTINGS</h2>
+            <h2 className="text-xl text-black mb-3 ml-10">TOPOLOGY SETTINGS</h2>
           </div>
 
           <div className="flex items-center justify-between mb-2 w-full">
@@ -47,7 +47,6 @@ const SideBar = () => {
             </select>
           </div>
 
-          {/* Render layout-specific sidebars */}
           {layout === 'Hierarchical' && <HierarchicalSidebar />}
           {layout === 'Organic' && <OrganicSidebar />}
           {layout === 'Orthogonal' && <OrthogonalSidebar />}
