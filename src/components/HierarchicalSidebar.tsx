@@ -31,6 +31,11 @@ const HierarchicalSidebar = () => {
     recursiveEdgeRoutingStyle,
     uTurnSymmetry,
     allowShortcuts,
+    edgeLabelPlacementHierarchical,
+    nodeLabelPlacementHierarchical,
+    edgeOrientation,
+    alongEdge,
+    sideOfSide,
     toggleGeneral,
     toggleEdges,
     toggleLabelling,
@@ -60,6 +65,11 @@ const HierarchicalSidebar = () => {
     setRecursiveEdgeRoutingStyle,
     setUTurnSymmetry,
     toggleAllowShortcuts,
+    setEdgeLabelPlacementHierarchical,
+    setNodeLabelPlacementHierarchical,
+    setEdgeOrientation,
+    setAlongEdge,
+    setSideOfSide,
   } = useHierarchicalSideBarStore();
 
   return (
@@ -439,17 +449,74 @@ const HierarchicalSidebar = () => {
           {isLabellingOpen && (
             <div className="pb-4">
               <div className="space-y-3">
-                <div className="flex items-center">
-                  <input type="checkbox" className="h-4 w-4" />
-                  <label className="ml-2 text-sm ">Show Node Labels</label>
+                <div className='flex items-center justify-between '>
+                  <span className='text-sm'>Node Labelling</span>
+                  <select
+                    value={nodeLabelPlacementHierarchical}
+                    onChange={(e) => setNodeLabelPlacementHierarchical(e.target.value)}
+                    className='p-1 border rounded w-30'
+                  >
+                    <option>Consider</option>
+                    <option>Generic</option>
+                    <option>Ignore</option>
+                  </select>
                 </div>
-                <div className="flex items-center">
-                  <input type="checkbox" className="h-4 w-4" />
-                  <label className="ml-2 text-sm ">Show Edge Labels</label>
+                <div className='flex items-center justify-between'>
+                  <span className='text-sm'>Edge Labelling</span>
+                  <select
+                    value={edgeLabelPlacementHierarchical}
+                    onChange={(e) => setEdgeLabelPlacementHierarchical(e.target.value)}
+                    className='p-1 border rounded w-30'
+                  >
+                    <option>Ignore</option>
+                    <option>Integrated</option>
+                    <option>Generic</option>
+                  </select>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm ">Font Size:</span>
-                  <input type="number" className="w-20 p-1 border rounded" defaultValue={12} />
+
+                <div className='flex items-center justify-between'>
+                  <span className='text-sm'>Orientation</span>
+                  <select
+                    value={edgeOrientation}
+                    onChange={(e) => setEdgeOrientation(e.target.value)}
+                    className='p-1 border rounded w-30'
+                  >
+                    <option>Parallel</option>
+                    <option>Orthogonal</option>
+                    <option>Horizontal</option>
+                    <option>Vertical</option>
+                  </select>
+                </div>
+
+                <div className='flex items-center justify-between'>
+                  <span className='text-sm'>Along Edge</span>
+                  <select
+                    value={alongEdge}
+                    onChange={(e) => setAlongEdge(e.target.value)}
+                    className='p-1 border rounded w-30'
+                  >
+                    <option>Anywhere</option>
+                    <option>At Source</option>
+                    <option>At Source Port</option>
+                    <option>At Target</option>
+                    <option>At Target Port</option>
+                    <option>Centered</option>
+                  </select>
+                </div>
+
+                <div className='flex items-cente justify-between'>
+                  <span className='text-sm'>Side of Edge</span>
+                  <select
+                    value={sideOfSide}
+                    onChange={(e) => setSideOfSide(e.target.value)}
+                    className='p-1 border rounded w-30'
+                  >
+                    <option>Anywhere</option>
+                    <option>On Edge</option>
+                    <option>Left</option>
+                    <option>Right</option>
+                    <option>Left or Right</option>
+                  </select>
                 </div>
               </div>
             </div>

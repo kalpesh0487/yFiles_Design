@@ -93,14 +93,34 @@
         - Allow Shortcuts
           - true
           - false
-      
+          
       - Labelling
-        - show node labels
-          - true
-          - false
-        - font size
-          - number
+        - Edge Labeling
+          - Integrated
+          - Ignore
+          - Genric
+        - Orientation
+          - Parallel
+          - Orthogonal
+          - Horizontal
+          - Vertical
+        - Alone Edge
+          - Anywhere
+          - At Source
+          - At Source Port
+          - At Target
+          - At Target Port
+          - Centered
+        - Side of Edge
+          - Anywhere
+          - On Edge
+          - Left
+          - Right
+          - Left or Right
+        
   
+
+
   - Organic
     - layout
       - Organic
@@ -144,6 +164,30 @@
           - louvain modularity
       
       - Labelling
+        - Edge Labeling
+          - Integrated
+          - Ignore
+          - Genric
+        - Orientation
+          - Parallel
+          - Orthogonal
+          - Horizontal
+          - Vertical
+        - Alone Edge
+          - Anywhere
+          - At Source
+          - At Source Port
+          - At Target
+          - At Target Port
+          - Centered
+        - Side of Edge
+          - Anywhere
+          - On Edge
+          - Left
+          - Right
+          - Left or Right
+        
+
 
   - Orthogonal
     - layout
@@ -176,6 +220,28 @@
           - false
       
       - Labelling
+        - Edge Labeling
+          - Integrated
+          - Ignore
+          - Genric
+        - Orientation
+          - Parallel
+          - Orthogonal
+          - Horizontal
+          - Vertical
+        - Alone Edge
+          - Anywhere
+          - At Source
+          - At Source Port
+          - At Target
+          - At Target Port
+          - Centered
+        - Side of Edge
+          - Anywhere
+          - On Edge
+          - Left
+          - Right
+          - Left or Right
       
   - Circular
     - layout
@@ -216,6 +282,28 @@
           - Select Edge Outside
       
       - Labelling
+        - Edge Labeling
+          - Integrated
+          - Ignore
+          - Genric
+        - Orientation
+          - Parallel
+          - Orthogonal
+          - Horizontal
+          - Vertical
+        - Alone Edge
+          - Anywhere
+          - At Source
+          - At Source Port
+          - At Target
+          - At Target Port
+          - Centered
+        - Side of Edge
+          - Anywhere
+          - On Edge
+          - Left
+          - Right
+          - Left or Right
 
   - Tree
     - layout
@@ -254,6 +342,28 @@
           - Bundled
       
       - Labelling
+        - Edge Labeling
+          - Integrated
+          - Ignore
+          - Genric
+        - Orientation
+          - Parallel
+          - Orthogonal
+          - Horizontal
+          - Vertical
+        - Alone Edge
+          - Anywhere
+          - At Source
+          - At Source Port
+          - At Target
+          - At Target Port
+          - Centered
+        - Side of Edge
+          - Anywhere
+          - On Edge
+          - Left
+          - Right
+          - Left or Right
 
 
       

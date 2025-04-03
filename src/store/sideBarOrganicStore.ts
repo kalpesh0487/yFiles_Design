@@ -18,6 +18,13 @@ interface OrganicSideBarState {
   edgeStyle: string;
   arrowSize: number;
 
+  // label
+  edgeLabelPlacementOrganic: string;
+  nodeLabelPlacementOrganic: string;
+  edgeOrientationOrganic: string,
+  alongEdgeOrganic: string,
+  sideOfSideOrganic: string,
+
   toggleGeneral: () => void;
   toggleEdges: () => void;
   toggleLabelling: () => void;
@@ -34,6 +41,13 @@ interface OrganicSideBarState {
 
   setEdgeStyle: (value: string) => void;
   setArrowSize: (value: number) => void;
+
+  //label
+  setEdgeLabelPlacementOrganic : (value: string) => void;
+  setNodeLabelPlacementOrganic : (value: string) => void;
+  setEdgeOrientationOrganic: (value: string) => void;
+  setAlongEdgeOrganic: (value: string) => void;
+  setSideOfSideOrganic: (value: string) => void;
 }
 
 const useOrganicSideBarStore = create<OrganicSideBarState>((set) => ({
@@ -54,6 +68,12 @@ const useOrganicSideBarStore = create<OrganicSideBarState>((set) => ({
 
   edgeStyle: 'straight',
   arrowSize: 4,
+
+  edgeLabelPlacementOrganic: 'ignore',
+  nodeLabelPlacementOrganic: 'consider',
+  edgeOrientationOrganic: '',
+  alongEdgeOrganic: '',
+  sideOfSideOrganic: '',
 
   toggleGeneral: () =>
     set((state) => ({
@@ -87,6 +107,13 @@ const useOrganicSideBarStore = create<OrganicSideBarState>((set) => ({
 
   setEdgeStyle: (value) => set({ edgeStyle: value }),
   setArrowSize: (value) => set({ arrowSize: value }),
+
+  setEdgeLabelPlacementOrganic : (value) => set({ edgeLabelPlacementOrganic: value }),
+  setNodeLabelPlacementOrganic : (value) => set({ nodeLabelPlacementOrganic: value }),
+  setEdgeOrientationOrganic: (value) => set({ edgeOrientationOrganic:value }),
+  setAlongEdgeOrganic: (value) => set({ alongEdgeOrganic: value }),
+  setSideOfSideOrganic: (value) => set({ sideOfSideOrganic: value }),
+
 }));
 
 export default useOrganicSideBarStore;

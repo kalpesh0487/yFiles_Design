@@ -32,6 +32,13 @@ interface HierarchicalSideBarState {
   uTurnSymmetry: number;
   allowShortcuts: boolean;
 
+  // labels
+  edgeLabelPlacementHierarchical: string;
+  nodeLabelPlacementHierarchical: string;
+  edgeOrientation: string,
+  alongEdge: string,
+  sideOfSide: string,
+
   toggleGeneral: () => void;
   toggleEdges: () => void;
   toggleLabelling: () => void;
@@ -62,6 +69,13 @@ interface HierarchicalSideBarState {
   setRecursiveEdgeRoutingStyle: (value: string) => void;
   setUTurnSymmetry: (value: number) => void;
   toggleAllowShortcuts: () => void;
+
+  // labels
+  setEdgeLabelPlacementHierarchical : (value: string) => void;
+  setNodeLabelPlacementHierarchical : (value: string) => void;
+  setEdgeOrientation: (value: string) => void;
+  setAlongEdge: (value: string) => void;
+  setSideOfSide: (value: string) => void;
 }
 
 const useHierarchicalSideBarStore = create<HierarchicalSideBarState>((set) => ({
@@ -97,6 +111,13 @@ const useHierarchicalSideBarStore = create<HierarchicalSideBarState>((set) => ({
   uTurnSymmetry: 50,
   allowShortcuts: false,
 
+  // labels
+  edgeLabelPlacementHierarchical: 'ignore',
+  nodeLabelPlacementHierarchical : 'consider',
+  edgeOrientation: '',
+  alongEdge: '',
+  sideOfSide: '',
+
   toggleGeneral: () => set((state) => ({ isGeneralOpen: !state.isGeneralOpen, isEdgesOpen: false, isLabellingOpen: false })),
   toggleEdges: () => set((state) => ({ isEdgesOpen: !state.isEdgesOpen, isGeneralOpen: false, isLabellingOpen: false })),
   toggleLabelling: () => set((state) => ({ isLabellingOpen: !state.isLabellingOpen, isGeneralOpen: false, isEdgesOpen: false })),
@@ -127,6 +148,14 @@ const useHierarchicalSideBarStore = create<HierarchicalSideBarState>((set) => ({
   setRecursiveEdgeRoutingStyle: (value) => set({ recursiveEdgeRoutingStyle: value }),
   setUTurnSymmetry: (value) => set({ uTurnSymmetry: value }),
   toggleAllowShortcuts: () => set((state) => ({ allowShortcuts: !state.allowShortcuts })),
+
+
+  // label
+  setEdgeLabelPlacementHierarchical: (value) => set({ edgeLabelPlacementHierarchical: value}),
+  setNodeLabelPlacementHierarchical: (value) => set({ nodeLabelPlacementHierarchical: value}),
+  setEdgeOrientation: (value: string) => set({ edgeOrientation: value }),
+  setAlongEdge: (value: string) => set({ alongEdge: value}),
+  setSideOfSide: (value: string) => set({ sideOfSide: value}),
 }));
 
 export default useHierarchicalSideBarStore;

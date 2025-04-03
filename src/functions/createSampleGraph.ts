@@ -290,6 +290,10 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
         minimumDistance: config.minimumEdgeDistance || 10,
         recursiveEdgePolicy: mapRecursiveEdgePolicy(config.recursiveEdgeRoutingStyle),
       },
+
+      edgeLabelPlacement: 'ignore',
+      nodeLabelPlacement : 'consider',
+      
     });
   } else if (layout === 'Orthogonal') {
     layoutAlgorithm = new OrthogonalLayout({
@@ -332,6 +336,7 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
       // selfLoopRouter: {
       //   routingStyle: 'rounded',
       // },
+
     });
   }
 

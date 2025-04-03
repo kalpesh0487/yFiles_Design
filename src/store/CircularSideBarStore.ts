@@ -14,6 +14,12 @@ interface CircularSideBarState {
   bundlingStrength: number;
   edgeRoutingStyleCircular: string;
 
+  edgeLabelPlacementCircular: string;
+  nodeLabelPlacementCircular: string;
+  edgeOrientationCircular: string,
+  alongEdgeCircular: string,
+  sideOfSideCircular: string,
+
   toggleGeneral: () => void;
   toggleEdges: () => void;
   toggleLabelling: () => void;
@@ -26,6 +32,13 @@ interface CircularSideBarState {
   toggleEnableEdgeBundling: () => void;
   setBundlingStrength: (value: number) => void;
   setEdgeRoutingStyleCircular: (value: string) => void;
+
+  // labels
+  setEdgeLabelPlacementCircular : (value: string) => void;
+  setNodeLabelPlacementCircular : (value: string) => void;
+  setEdgeOrientationCircular: (value: string) => void;
+  setAlongEdgeCircular: (value: string) => void;
+  setSideOfSideCircular: (value: string) => void;
 }
 
 const useCircularSideBarStore = create<CircularSideBarState>((set) => ({
@@ -42,6 +55,12 @@ const useCircularSideBarStore = create<CircularSideBarState>((set) => ({
   bundlingStrength: 0.5, 
   edgeRoutingStyleCircular: 'Automatic',
 
+  edgeLabelPlacementCircular: 'ignore',
+  nodeLabelPlacementCircular: 'consider',
+  edgeOrientationCircular: '',
+  alongEdgeCircular: '',
+  sideOfSideCircular: '',
+
   toggleGeneral: () => set((state) => ({ isGeneralOpen: !state.isGeneralOpen, isEdgesOpen: false, isLabellingOpen: false })),
   toggleEdges: () => set((state) => ({ isEdgesOpen: !state.isEdgesOpen, isGeneralOpen: false, isLabellingOpen: false })),
   toggleLabelling: () => set((state) => ({ isLabellingOpen: !state.isLabellingOpen, isGeneralOpen: false, isEdgesOpen: false })),
@@ -53,6 +72,12 @@ const useCircularSideBarStore = create<CircularSideBarState>((set) => ({
   toggleEnableEdgeBundling: () => set((state) => ({ enableEdgeBundling: !state.enableEdgeBundling })),
   setBundlingStrength: (value) => set({ bundlingStrength: value }),
   setEdgeRoutingStyleCircular: (value) => set({ edgeRoutingStyleCircular: value }),
+
+  setEdgeLabelPlacementCircular : (value) => set({ edgeLabelPlacementCircular: value }),
+  setNodeLabelPlacementCircular : (value) => set({ nodeLabelPlacementCircular: value }),
+  setEdgeOrientationCircular: (value) => set({ edgeOrientationCircular:value }),
+  setAlongEdgeCircular: (value) => set({ alongEdgeCircular: value }),
+  setSideOfSideCircular: (value) => set({ sideOfSideCircular: value }),
 }));
 
 export default useCircularSideBarStore;
