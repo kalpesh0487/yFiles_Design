@@ -28,4 +28,4 @@ export function initializeToolTips(graphInputMode: GraphViewerInputMode): void {
     graphInputMode.toolTipInputMode.toolTipLocationOffset = new Point(2, 14);
     graphInputMode.toolTipInputMode.duration = '10s';
     graphInputMode.toolTipInputMode.delay = '0.3s';
-  }
+}

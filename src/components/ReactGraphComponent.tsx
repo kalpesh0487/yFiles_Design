@@ -64,8 +64,16 @@ export function ReactGraphComponent() {
     minimumLastSegmentLengthOrthogonal,
     routeSelectedEdgesDownwards,
   } = useOrthogonalSideBarStore();
-  const { partitioningPolicy, useDrawingAsSketch } = useCircularSideBarStore();
-  const { orientation: treeOrientation } = useTreeSideBarStore();
+  const { 
+    partitioningPolicy, 
+    useDrawingAsSketch,
+    enableEdgeBundling,
+    bundlingStrength,
+    edgeRoutingStyleCircular
+  } = useCircularSideBarStore();
+  const {
+    orientation: treeOrientation 
+  } = useTreeSideBarStore();
 
   const layoutConfig = {
     // Hierarchical nodes
@@ -109,6 +117,10 @@ export function ReactGraphComponent() {
     // Circular
     partitioningPolicy,
     fromSketchMode: useDrawingAsSketch,
+    //circular edges
+    enableEdgeBundling,
+    bundlingStrength,
+    edgeRoutingStyleCircular,
     // Tree
     treeOrientation,
   };
@@ -202,6 +214,10 @@ export function ReactGraphComponent() {
     // Circular
     partitioningPolicy,
     useDrawingAsSketch,
+    // circular edges
+    enableEdgeBundling,
+    bundlingStrength,
+    edgeRoutingStyleCircular,
     // Tree 
     treeOrientation,
     networkData,

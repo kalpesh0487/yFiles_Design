@@ -12,7 +12,7 @@ const CircularSidebar = () => {
     useDrawingAsSketch,
     enableEdgeBundling,
     bundlingStrength,
-    edgeRoutingStyle,
+    edgeRoutingStyleCircular,
     toggleGeneral,
     toggleEdges,
     toggleLabelling,
@@ -23,7 +23,7 @@ const CircularSidebar = () => {
     toggleUseDrawingAsSketch,
     toggleEnableEdgeBundling,
     setBundlingStrength,
-    setEdgeRoutingStyle,
+    setEdgeRoutingStyleCircular,
   } = useCircularSideBarStore();
 
   return (
@@ -147,8 +147,8 @@ const CircularSidebar = () => {
                 <div className="flex items-center justify-between">
                   <span className="text-sm ">Edge Routing Style:</span>
                   <select
-                    value={edgeRoutingStyle}
-                    onChange={(e) => setEdgeRoutingStyle(e.target.value)}
+                    value={edgeRoutingStyleCircular}
+                    onChange={(e) => setEdgeRoutingStyleCircular(e.target.value)}
                     className="p-1 border rounded"
                   >
                     <option>Inside</option>

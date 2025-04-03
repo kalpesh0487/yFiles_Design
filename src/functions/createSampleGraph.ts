@@ -15,6 +15,7 @@ import {
   CircularLayoutPartitioningPolicy,
   HierarchicalLayoutRoutingStyle,
   RecursiveEdgePolicy,
+  CircularLayoutEdgeRoutingPolicy,
 } from '@yfiles/yfiles';
 import backhaulIcon from '../assets/Internet Cloud.png';
 import switchHalfGreen from '../assets/Red-4 5.png';
@@ -67,9 +68,15 @@ interface LayoutConfig {
   minimumLastSegmentLengthOrthogonal?: number;
   routeSelectedEdgesDownwards?: boolean;
   
+  // circular nodes
   partitioningPolicy?: string;
   fromSketchMode?: boolean;
-  
+  //circular edges
+  enableEdgeBundling: boolean;
+  bundlingStrength: number;
+  edgeRoutingStyleCircular: string;
+
+
   treeOrientation?: string;
 }
 
@@ -146,8 +153,21 @@ function mapRecursiveEdgePolicy(policy: RecursiveEdgePolicy | string | undefined
       return RecursiveEdgePolicy.DIRECTED;
     case 'Undirected':
       return RecursiveEdgePolicy.UNDIRECTED;
-     default:
-       return RecursiveEdgePolicy.UNDIRECTED;
+    default:
+      return RecursiveEdgePolicy.UNDIRECTED;
+  }
+}
+
+function mapCircularEdgeRoutingPolicy(style: string): CircularLayoutEdgeRoutingPolicy {
+  switch (style) {
+    case 'Inside':
+      return CircularLayoutEdgeRoutingPolicy.INTERIOR;
+    case 'Outside':
+      return CircularLayoutEdgeRoutingPolicy.EXTERIOR;
+    case 'Automatic':
+      return CircularLayoutEdgeRoutingPolicy.AUTOMATIC;
+    default:
+      return CircularLayoutEdgeRoutingPolicy.$_enum; 
   }
 }
 
@@ -285,6 +305,15 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
     layoutAlgorithm = new CircularLayout({
       partitioningPolicy: mapPartitioningPolicy(config.partitioningPolicy || 'BCC Compact'),
       fromSketchMode: config.fromSketchMode || false,
+      edgeLabelPlacement: 'ignore',
+      
+      edgeRoutingPolicy: mapCircularEdgeRoutingPolicy(config.edgeRoutingStyleCircular),
+      edgeBundling: {
+        bundlingStrength: config.bundlingStrength,
+        defaultBundleDescriptor : {
+          bundled: config.enableEdgeBundling
+        }
+      }
     });
   } else if (layout === 'Organic') {
     layoutAlgorithm = new OrganicLayout({
@@ -294,10 +323,15 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
       defaultMinimumNodeDistance: config.minimumNodeDistance || 4,
       compactnessFactor: config.compactness || 0.2,
       avoidNodeEdgeOverlap: config.avoidNodeEdgeOverlap || false,
+      edgeLabelPlacement: 'integrated'
     });
   } else if (layout === 'Tree') {
     layoutAlgorithm = new TreeLayout({
       layoutOrientation: mapOrientationToLayoutOrientation(config.treeOrientation || 'Top to Bottom'),
+      // defaultPortAssigner : 
+      // selfLoopRouter: {
+      //   routingStyle: 'rounded',
+      // },
     });
   }
 

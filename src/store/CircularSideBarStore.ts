@@ -9,11 +9,10 @@ interface CircularSideBarState {
   partitioningPolicy: string;
   actOnSelectionOnly: boolean;
   useDrawingAsSketch: boolean;
-  // Removed edgeStyle and arrowSize
-  // New edge properties
+  // edge properties
   enableEdgeBundling: boolean;
   bundlingStrength: number;
-  edgeRoutingStyle: string;
+  edgeRoutingStyleCircular: string;
 
   toggleGeneral: () => void;
   toggleEdges: () => void;
@@ -23,11 +22,10 @@ interface CircularSideBarState {
   setPartitioningPolicy: (value: string) => void;
   toggleActOnSelectionOnly: () => void;
   toggleUseDrawingAsSketch: () => void;
-  // Removed setEdgeStyle and setArrowSize
-  // New setters and toggles
+  // setters and toggles for edges
   toggleEnableEdgeBundling: () => void;
   setBundlingStrength: (value: number) => void;
-  setEdgeRoutingStyle: (value: string) => void;
+  setEdgeRoutingStyleCircular: (value: string) => void;
 }
 
 const useCircularSideBarStore = create<CircularSideBarState>((set) => ({
@@ -39,9 +37,10 @@ const useCircularSideBarStore = create<CircularSideBarState>((set) => ({
   partitioningPolicy: 'BCC Compact',
   actOnSelectionOnly: false,
   useDrawingAsSketch: false,
+  // edges
   enableEdgeBundling: false,
   bundlingStrength: 0.5, 
-  edgeRoutingStyle: 'Automatic',
+  edgeRoutingStyleCircular: 'Automatic',
 
   toggleGeneral: () => set((state) => ({ isGeneralOpen: !state.isGeneralOpen, isEdgesOpen: false, isLabellingOpen: false })),
   toggleEdges: () => set((state) => ({ isEdgesOpen: !state.isEdgesOpen, isGeneralOpen: false, isLabellingOpen: false })),
@@ -53,7 +52,7 @@ const useCircularSideBarStore = create<CircularSideBarState>((set) => ({
   toggleUseDrawingAsSketch: () => set((state) => ({ useDrawingAsSketch: !state.useDrawingAsSketch })),
   toggleEnableEdgeBundling: () => set((state) => ({ enableEdgeBundling: !state.enableEdgeBundling })),
   setBundlingStrength: (value) => set({ bundlingStrength: value }),
-  setEdgeRoutingStyle: (value) => set({ edgeRoutingStyle: value }),
+  setEdgeRoutingStyleCircular: (value) => set({ edgeRoutingStyleCircular: value }),
 }));
 
 export default useCircularSideBarStore;
