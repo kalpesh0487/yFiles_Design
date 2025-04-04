@@ -193,11 +193,14 @@ const CircularSidebar = () => {
                   <select
                     value={nodeLabelPlacementCircular}
                     onChange={(e) => setNodeLabelPlacementCircular(e.target.value)}
-                    className='p-1 border rounded w-30'
+                    className='p-1 border rounded w-30 items-center'
                   >
                     <option>Consider</option>
                     <option>Generic</option>
                     <option>Ignore</option>
+                    <option>Horizontal</option>
+                    <option>Ray-like</option>
+                    <option>Ray-like-Leaves</option>
                   </select>
                 </div>
                 <div className='flex items-center justify-between'>
@@ -208,7 +211,6 @@ const CircularSidebar = () => {
                     className='p-1 border rounded w-30'
                   >
                     <option>Ignore</option>
-                    <option>Integrated</option>
                     <option>Generic</option>
                   </select>
                 </div>

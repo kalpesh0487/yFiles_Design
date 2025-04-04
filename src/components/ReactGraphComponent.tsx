@@ -4,6 +4,8 @@ import {
   GraphViewerInputMode,
   License,
   LayoutExecutor,
+  EdgeLabelPlacementStringValues,
+  NodeLabelPlacementStringValues,
 } from '@yfiles/yfiles';
 import licenseData from '../assets/license.json';
 import '../styles/ReactGraphComponent.css';
@@ -47,6 +49,12 @@ export function ReactGraphComponent() {
     recursiveEdgeRoutingStyle,
     uTurnSymmetry,
     allowShortcuts,
+    // edges
+    edgeLabelPlacementHierarchical,
+    nodeLabelPlacementHierarchical,
+    edgeOrientation,
+    alongEdge,
+    sideOfSide,
   } = useHierarchicalSideBarStore();
   const {
     preferredEdgeLength,
@@ -55,6 +63,12 @@ export function ReactGraphComponent() {
     compactness,
     orientation: organicOrientation,
     clustering,
+    // label organic
+    edgeLabelPlacementOrganic,
+    nodeLabelPlacementOrganic,
+    edgeOrientationOrganic,
+    alongEdgeOrganic,
+    sideOfSideOrganic,
   } = useOrganicSideBarStore();
   const { 
     gridSpacing, 
@@ -63,16 +77,34 @@ export function ReactGraphComponent() {
     minimumSegmentLength,
     minimumLastSegmentLengthOrthogonal,
     routeSelectedEdgesDownwards,
+    // orthogonal
+    edgeLabelPlacementOrthogonal,
+    nodeLabelPlacementOrthogonal,
+    edgeOrientationOrthogonal,
+    alongEdgeOrthogonal,
+    sideOfSideOrthogonal,
+
   } = useOrthogonalSideBarStore();
   const { 
     partitioningPolicy, 
     useDrawingAsSketch,
     enableEdgeBundling,
     bundlingStrength,
-    edgeRoutingStyleCircular
+    edgeRoutingStyleCircular,
+
+    edgeLabelPlacementCircular,
+    nodeLabelPlacementCircular,
+    edgeOrientationCircular,
+    alongEdgeCircular,
+    sideOfSideCircular,
   } = useCircularSideBarStore();
   const {
-    orientation: treeOrientation 
+    orientation: treeOrientation,
+    edgeLabelPlacementTree,
+    nodeLabelPlacementTree,
+    edgeOrientationTreeTree,
+    alongEdgeTree,
+    sideOfSideTree,
   } = useTreeSideBarStore();
 
   const layoutConfig = {
@@ -99,6 +131,12 @@ export function ReactGraphComponent() {
     recursiveEdgeRoutingStyle,
     uTurnSymmetry,
     allowShortcuts,
+    // Hierarchical labels 
+    edgeLabelPlacementHierarchical,
+    nodeLabelPlacementHierarchical,
+    edgeOrientation,
+    alongEdge,
+    sideOfSide,
     // Organic
     preferredEdgeLength,
     minimumNodeDistance,
@@ -106,6 +144,13 @@ export function ReactGraphComponent() {
     compactness: compactness / 100,
     organicOrientation,
     clustering,
+
+    edgeLabelPlacementOrganic,
+    nodeLabelPlacementOrganic,
+    edgeOrientationOrganic,
+    alongEdgeOrganic,
+    sideOfSideOrganic,
+
     // Orthogonal general
     gridSpacing,
     layoutMode,
@@ -114,15 +159,34 @@ export function ReactGraphComponent() {
     minimumSegmentLength,
     minimumLastSegmentLengthOrthogonal,
     routeSelectedEdgesDownwards,
+    // orthogonal labels
+    edgeLabelPlacementOrthogonal,
+    nodeLabelPlacementOrthogonal,
+    edgeOrientationOrthogonal,
+    alongEdgeOrthogonal,
+    sideOfSideOrthogonal,
+
     // Circular
     partitioningPolicy,
     fromSketchMode: useDrawingAsSketch,
-    //circular edges
+    // circular edges
     enableEdgeBundling,
     bundlingStrength,
     edgeRoutingStyleCircular,
+    // circular label
+    edgeLabelPlacementCircular,
+    nodeLabelPlacementCircular,
+    edgeOrientationCircular,
+    alongEdgeCircular,
+    sideOfSideCircular,
     // Tree
     treeOrientation,
+    // Tree Label
+    edgeLabelPlacementTree,
+    nodeLabelPlacementTree,
+    edgeOrientationTreeTree,
+    alongEdgeTree,
+    sideOfSideTree,
   };
 
   useLayoutEffect(() => {
@@ -144,7 +208,7 @@ export function ReactGraphComponent() {
     }
 
     const graphComponent = graphComponentRef.current!;
-
+    
     createSampleGraph(graphComponent.graph, layout, layoutConfig, networkData);
 
     graphComponent.graph.nodes.forEach((node) => {
@@ -174,14 +238,12 @@ export function ReactGraphComponent() {
   }, [
     showLabels,
     layout,
-    // Hierarchical nodes
     duration,
     edgeToEdge,
     nodeToNode,
     nodeToEdge,
     layerToLayer,
     hierarchicalOrientation,
-    // Hierarchical edges
     edgeRoutingStyle,
     backloopRouting,
     automaticEdgeGrouping,
@@ -197,28 +259,59 @@ export function ReactGraphComponent() {
     recursiveEdgeRoutingStyle,
     uTurnSymmetry,
     allowShortcuts,
-    // Organic
+    edgeLabelPlacementHierarchical,
+    nodeLabelPlacementHierarchical,
+    edgeOrientation,
+    alongEdge,
+    sideOfSide,
+    // organic placements
+    edgeLabelPlacementOrganic,
+    nodeLabelPlacementOrganic,
+    edgeOrientationOrganic,
+    alongEdgeOrganic,
+    sideOfSideOrganic,
+
+    // orthogonal labels
+    edgeLabelPlacementOrthogonal,
+    nodeLabelPlacementOrthogonal,
+    edgeOrientationOrthogonal,
+    alongEdgeOrthogonal,
+    sideOfSideOrthogonal,
+
+    // circular lables
+    edgeLabelPlacementCircular,
+    nodeLabelPlacementCircular,
+    edgeOrientationCircular,
+    alongEdgeCircular,
+    sideOfSideCircular,
+
+    // Tree Label
+    edgeLabelPlacementTree,
+    nodeLabelPlacementTree,
+    edgeOrientationTreeTree,
+    alongEdgeTree,
+    sideOfSideTree,
+
+    edgeOrientation,
+    alongEdge,
+    sideOfSide,
     preferredEdgeLength,
     minimumNodeDistance,
     avoidNodeEdgeOverlap,
     compactness,
     organicOrientation,
     clustering,
-    // Orthogonal 
     gridSpacing,
     layoutMode,
     minimumFirstSegmentLengthOrthogonal,
     minimumSegmentLength,
     minimumLastSegmentLengthOrthogonal,
     routeSelectedEdgesDownwards,
-    // Circular
     partitioningPolicy,
     useDrawingAsSketch,
-    // circular edges
     enableEdgeBundling,
     bundlingStrength,
     edgeRoutingStyleCircular,
-    // Tree 
     treeOrientation,
     networkData,
   ]);
