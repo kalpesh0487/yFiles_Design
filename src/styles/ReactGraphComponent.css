@@ -12,7 +12,7 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   z-index: 10000;
 }
-  
+
 .popup-header {
   display: flex;
   justify-content: space-between;
@@ -36,12 +36,39 @@
 }
   
 .tooltip {
-  /* height: 100px;
-  width: 200px; */
+  height: 200px;
+  width: 200px;
   font-size: 18px;
-  background: rgba(249, 247, 247, 0.8);
+  background: rgba(247, 247, 247, 0.8);
   color: rgb(9, 7, 7); 
   padding: 5px 10px; 
   border-radius: 6px;
   border: 2px solid #070404; 
+  padding-top: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.tooltip-img {
+  max-width: 150px;
+  max-height: 150px;
+  display: block;
+  margin-bottom: 8px;
+  background-blend-mode: color;
+  overflow: hidden;
+}
+
+.tooltip-table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 16px;
+  text-align: left;
+}
+
+.tooltip-table th,
+.tooltip-table td {
+  border: 0.2px solid #130d0d;
+  padding: 6px;
 }

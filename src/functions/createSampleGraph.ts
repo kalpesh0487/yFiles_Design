@@ -10,18 +10,24 @@ import {
   LabelStyle,
   PolylineEdgeStyle,
   TreeLayout,
-  LayoutOrientation,
-  OrganicLayoutClusteringPolicy,
-  CircularLayoutPartitioningPolicy,
   HierarchicalLayoutRoutingStyle,
   RecursiveEdgePolicy,
-  CircularLayoutEdgeRoutingPolicy,
   EdgeLabelPlacement,
   NodeLabelPlacement,
   RadialEdgeLabelPlacement,
   RadialEdgeLabelPlacementStringValues,
   RadialNodeLabelPlacementStringValues,
   RadialNodeLabelPlacement,
+  EdgeLabelPreferredPlacement,
+  LabelEdgeSidesStringValues,
+  LabelAlongEdgePlacementsStringValues,
+  HierarchicalLayoutData,
+  ILabelOwner,
+  LabelAlongEdgePlacements,
+  OrthogonalLayoutData,
+  CircularLayoutData,
+  OrganicLayoutData,
+  TreeLayoutData
 } from '@yfiles/yfiles';
 import backhaulIcon from '../assets/Internet Cloud.png';
 import switchHalfGreen from '../assets/Red-4 5.png';
@@ -32,6 +38,7 @@ import switchDGreen from '../assets/Asset 11@2x (1).png';
 import Internet from '../assets/Internet Cloud (1).png';
 import WAN from '../assets/Internet Cloud (2).png';
 import { NetworkData } from '../types/types';
+import { mapAlongEdge, mapCircularEdgeRoutingPolicy, mapClusteringPolicy, mapEdgeRoutingStyle, mapEdgeSide, mapOrientationToLayoutOrientation, mapPartitioningPolicy, mapRecursiveEdgePolicy } from './mappingFunctions';
 
 type EdgeLabelPlacementStringValues = "ignore" | "integrated" | "generic";
 type NodeLabelPlacementStringValues = "ignore" | "consider" | "generic";
@@ -65,8 +72,8 @@ interface LayoutConfig {
   edgeLabelPlacementHierarchical: EdgeLabelPlacement | EdgeLabelPlacementStringValues;
   nodeLabelPlacementHierarchical: NodeLabelPlacement   | NodeLabelPlacementStringValues;
   edgeOrientation: string,
-  alongEdge: string,
-  sideOfSide: string,
+  alongEdge: LabelAlongEdgePlacementsStringValues,
+  sideOfSide: LabelEdgeSidesStringValues,
 
   // orgnic
   preferredEdgeLength?: number;
@@ -78,7 +85,7 @@ interface LayoutConfig {
 
   // organic labels
   edgeLabelPlacementOrganic : EdgeLabelPlacement | EdgeLabelPlacementStringValues,
-  nodeLabelPlacementOrganic : NodeLabelPlacement   | NodeLabelPlacementStringValues,
+  nodeLabelPlacementOrganic : NodeLabelPlacement | NodeLabelPlacementStringValues,
   edgeOrientationOrganic : string,
   alongEdgeOrganic : string,
   sideOfSideOrganic : string,
@@ -122,96 +129,6 @@ interface LayoutConfig {
   sideOfSideTree: string,
 }
 
-function mapOrientationToLayoutOrientation(orientation: string): LayoutOrientation {
-  switch (orientation) {
-    case 'Top to Bottom':
-      return LayoutOrientation.TOP_TO_BOTTOM;
-    case 'Left to Right':
-      return LayoutOrientation.LEFT_TO_RIGHT;
-    case 'Bottom to Top':
-      return LayoutOrientation.BOTTOM_TO_TOP;
-    case 'Right to Left':
-      return LayoutOrientation.RIGHT_TO_LEFT;
-    case 'none':
-    default:
-      return LayoutOrientation.TOP_TO_BOTTOM;
-  }
-}
-
-function mapClusteringPolicy(policy: string): OrganicLayoutClusteringPolicy {
-  switch (policy) {
-    case 'None':
-      return OrganicLayoutClusteringPolicy.NONE;
-    case 'Edge Betweenness':
-      return OrganicLayoutClusteringPolicy.EDGE_BETWEENNESS;
-    case 'Label Propagation':
-      return OrganicLayoutClusteringPolicy.LABEL_PROPAGATION;
-    case 'Louvain Modularity':
-      return OrganicLayoutClusteringPolicy.LOUVAIN_MODULARITY;
-    default:
-      return OrganicLayoutClusteringPolicy.EDGE_BETWEENNESS;
-  }
-}
-
-function mapPartitioningPolicy(policy: string): CircularLayoutPartitioningPolicy {
-  switch (policy) {
-    case 'BCC Compact':
-      return CircularLayoutPartitioningPolicy.BCC_COMPACT;
-    case 'BCC Isolated':
-      return CircularLayoutPartitioningPolicy.BCC_ISOLATED;
-    case 'Single Cycle':
-      return CircularLayoutPartitioningPolicy.SINGLE_CYCLE;
-    default:
-      return CircularLayoutPartitioningPolicy.BCC_COMPACT;
-  }
-}
-
-function mapEdgeRoutingStyle(style: HierarchicalLayoutRoutingStyle | string | undefined): HierarchicalLayoutRoutingStyle {
-  if (typeof style !== 'string') {
-    return style ?? HierarchicalLayoutRoutingStyle.ORTHOGONAL; 
-  }
-  switch (style) {
-    case 'Orthogonal':
-      return HierarchicalLayoutRoutingStyle.ORTHOGONAL;
-    case 'Octilinear':
-      return HierarchicalLayoutRoutingStyle.OCTILINEAR;
-    case 'Polyline':
-      return HierarchicalLayoutRoutingStyle.POLYLINE;
-    case 'Curved':
-      return HierarchicalLayoutRoutingStyle.CURVED;
-    default:
-      return HierarchicalLayoutRoutingStyle.ORTHOGONAL;
-  }
-}
-
-function mapRecursiveEdgePolicy(policy: RecursiveEdgePolicy | string | undefined): RecursiveEdgePolicy {
-  if (typeof policy !== 'string') {
-    return policy ?? RecursiveEdgePolicy.UNDIRECTED;
-  }
-  switch (policy) {
-    case 'Off':
-      return RecursiveEdgePolicy.UNDIRECTED;
-    case 'Directed':
-      return RecursiveEdgePolicy.DIRECTED;
-    case 'Undirected':
-      return RecursiveEdgePolicy.UNDIRECTED;
-    default:
-      return RecursiveEdgePolicy.UNDIRECTED;
-  }
-}
-
-function mapCircularEdgeRoutingPolicy(style: string): CircularLayoutEdgeRoutingPolicy {
-  switch (style) {
-    case 'Inside':
-      return CircularLayoutEdgeRoutingPolicy.INTERIOR;
-    case 'Outside':
-      return CircularLayoutEdgeRoutingPolicy.EXTERIOR;
-    case 'Automatic':
-      return CircularLayoutEdgeRoutingPolicy.AUTOMATIC;
-    default:
-      return CircularLayoutEdgeRoutingPolicy.$_enum; 
-  }
-}
 
 export function createSampleGraph(graph: IGraph, layout: string, config: LayoutConfig, networkData: NetworkData): void {
   const nodeMap = new Map();
@@ -248,6 +165,8 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
     newNode.tag = { labelText, labelParameter, label, data: node };
     nodeMap.set(node.id, newNode);
   });
+  // ===============================================================================
+  
 
   networkData.connections.forEach(edge => {
     const sourceNode = nodeMap.get(edge.source);
@@ -261,7 +180,7 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
         edgeStyle = new PolylineEdgeStyle({
           smoothingLength: 30,
         });
-
+        
         edgeStyle.stroke = new Stroke({
           fill: edge.color || '#000000',
           thickness: config.considerEdgeThickness ? 2.0 : 1.0,
@@ -274,7 +193,7 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
         edgeStyle = new PolylineEdgeStyle({
           smoothingLength: 10,
         });
-
+        
         edgeStyle.stroke = new Stroke({
           fill: edge.color || '#000000',
           thickness: 2.4, 
@@ -307,11 +226,13 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
           textSize: 10,
           textFill: '#000000',
         }));
+        
       }
     }
   });
 
   let layoutAlgorithm;
+  let layoutData;
   
   if (layout === 'Hierarchical') {
     layoutAlgorithm = new HierarchicalLayout({
@@ -332,12 +253,22 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
         minimumDistance: config.minimumEdgeDistance || 10,
         recursiveEdgePolicy: mapRecursiveEdgePolicy(config.recursiveEdgeRoutingStyle),
       },
-
-      edgeLabelPlacement: config.edgeLabelPlacementHierarchical,
-      nodeLabelPlacement : config.nodeLabelPlacementHierarchical,
-      
+      edgeLabelPlacement: config.edgeLabelPlacementHierarchical as EdgeLabelPlacement,
+      nodeLabelPlacement: config.nodeLabelPlacementHierarchical as NodeLabelPlacement,
     });
-  } else if (layout === 'Orthogonal') {
+  
+    layoutData = new HierarchicalLayoutData({
+      edgeLabelPreferredPlacements: () => {
+        // const owner = label.owner;
+        const placement = new EdgeLabelPreferredPlacement({
+          placementAlongEdge: mapAlongEdge(config.alongEdge),
+          edgeSide: mapEdgeSide(config.sideOfSide),
+        });
+        return placement;
+      },
+    });
+  }
+  else if (layout === 'Orthogonal') {
     layoutAlgorithm = new OrthogonalLayout({
       gridSpacing: config.gridSpacing || 30,
       layoutMode: config.layoutMode === 'Forced Straight Line' ? 'forced-straight-line' : config.layoutMode === 'Relaxed' ? 'relaxed' : 'strict',
@@ -348,6 +279,17 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
       },
       edgeLabelPlacement: config.edgeLabelPlacementOrthogonal,
       nodeLabelPlacement: config.nodeLabelPlacementOrthogonal,
+    });
+
+    layoutData = new OrthogonalLayoutData({
+      edgeLabelPreferredPlacements: () => {
+        // const owner = label.owner;
+        const placement = new EdgeLabelPreferredPlacement({
+          placementAlongEdge: mapAlongEdge(config.alongEdgeOrthogonal),
+          edgeSide: mapEdgeSide(config.sideOfSideOrthogonal),
+        });
+        return placement;
+      },
     });
   } else if (layout === 'Circular') {
     layoutAlgorithm = new CircularLayout({
@@ -364,6 +306,8 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
       edgeLabelPlacement: config.edgeLabelPlacementCircular,
       nodeLabelPlacement: config.nodeLabelPlacementCircular
     });
+
+    
   } else if (layout === 'Organic') {
     layoutAlgorithm = new OrganicLayout({
       layoutOrientation: mapOrientationToLayoutOrientation(config.organicOrientation || 'Top to Bottom'),
@@ -373,8 +317,18 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
       compactnessFactor: config.compactness || 0.2,
       avoidNodeEdgeOverlap: config.avoidNodeEdgeOverlap || false,
       edgeLabelPlacement: config.edgeLabelPlacementOrganic,
-      nodeLabelPlacement: config.nodeLabelPlacementOrganic 
-      
+      nodeLabelPlacement: config.nodeLabelPlacementOrganic
+    });
+
+    layoutData = new OrganicLayoutData({
+      edgeLabelPreferredPlacements: () => {
+        // const owner = label.owner;
+        const placement = new EdgeLabelPreferredPlacement({
+          placementAlongEdge: mapAlongEdge(config.alongEdgeOrganic),
+          edgeSide: mapEdgeSide(config.sideOfSideOrganic),
+        });
+        return placement;
+      },
     });
   } else if (layout === 'Tree') {
     layoutAlgorithm = new TreeLayout({
@@ -385,10 +339,23 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
       // },
       edgeLabelPlacement: config.edgeLabelPlacementTree,
       nodeLabelPlacement: config.nodeLabelPlacementTree,
+      
+    });
+
+    layoutData = new TreeLayoutData({
+      edgeLabelPreferredPlacements: () => {
+        // const owner = label.owner;
+        const placement = new EdgeLabelPreferredPlacement({
+          placementAlongEdge: mapAlongEdge(config.alongEdgeTree),
+          edgeSide: mapEdgeSide(config.sideOfSideTree),
+        });
+        return placement;
+      },
     });
   }
 
   if (layoutAlgorithm) {
-    graph.applyLayout(layoutAlgorithm);
+    graph.applyLayout(layoutAlgorithm, layoutData);
   }
+  
 }

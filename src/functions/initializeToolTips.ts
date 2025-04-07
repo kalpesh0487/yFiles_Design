@@ -1,5 +1,11 @@
 import { GraphItemTypes, GraphViewerInputMode, IEdge, INode, Point } from "@yfiles/yfiles";
-import tooltipImage from '../assets/Asset 11@2x (5).png'
+import switches from '../assets/switches.jpg';
+import unknownDevice from '../assets/unknown-device.svg';
+import fatSwitch from '../assets/fat-switch.jpg';
+import backHaul from '../assets/Internet Cloud.png'
+import Internet from '../assets/Internet Cloud (1).png'
+import WAN from '../assets/Internet Cloud (2).png'
+import { DeviceType } from "../types/types";
 
 export function initializeToolTips(graphInputMode: GraphViewerInputMode): void {
     const toolTipItems = GraphItemTypes.NODE | GraphItemTypes.EDGE;
@@ -12,11 +18,52 @@ export function initializeToolTips(graphInputMode: GraphViewerInputMode): void {
         if (item instanceof IEdge && item.tag && item.tag.load !== undefined) {
           evt.toolTip = `<div class="tooltip">Load: ${item.tag.load}%</div>`;
         } else if (item instanceof INode && item.tag && item.tag.data) {
-          const { label, ip } = item.tag.data;
-          evt.toolTip = `<div class="tooltip">
-            Name: ${label}<br>
-            IP: ${ip}<br>
-          </div>
+          const { label, ip, type } = item.tag.data;
+          let imgSrc;
+          switch(type){
+            case DeviceType.FAT_SWITCH:
+              imgSrc = fatSwitch;
+              break;
+            case DeviceType.UNKNOWN:
+              imgSrc = unknownDevice;
+              break;
+            case DeviceType.SWITCH:
+              imgSrc = switches;
+              break;
+            case DeviceType.BACKHAUL:
+              imgSrc = backHaul;
+              break;
+            case DeviceType.WAN:
+              imgSrc = WAN;
+              break;
+            case DeviceType.INTERNET:
+              imgSrc = Internet;
+              break;
+            default:
+              imgSrc = '';
+          }
+          evt.toolTip = `
+            <div class="tooltip">
+              <img src="${imgSrc}" alt="Node Icon" class="tooltip-img" />
+              <table class="tooltip-table">
+                <tr>
+                  <th>Field</th>
+                  <th>Value</th>
+                </tr>
+                <tr>
+                  <td>Name</td>
+                  <td>${label}</td>
+                </tr>
+                <tr>
+                  <td>IP</td>
+                  <td>${ip}</td>
+                </tr>
+                <tr>
+                  <td>Type</td>
+                  <td>${type}</td>
+                </tr>
+              </table>
+            </div>
           `;
         }
       }

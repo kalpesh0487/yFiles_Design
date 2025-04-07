@@ -115,8 +115,8 @@ const useHierarchicalSideBarStore = create<HierarchicalSideBarState>((set) => ({
   edgeLabelPlacementHierarchical: 'ignore',
   nodeLabelPlacementHierarchical : 'consider',
   edgeOrientation: '',
-  alongEdge: '',
-  sideOfSide: '',
+  alongEdge: 'At Target',
+  sideOfSide: 'On Edge',
 
   toggleGeneral: () => set((state) => ({ isGeneralOpen: !state.isGeneralOpen, isEdgesOpen: false, isLabellingOpen: false })),
   toggleEdges: () => set((state) => ({ isEdgesOpen: !state.isEdgesOpen, isGeneralOpen: false, isLabellingOpen: false })),

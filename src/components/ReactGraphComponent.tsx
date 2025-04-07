@@ -4,8 +4,6 @@ import {
   GraphViewerInputMode,
   License,
   LayoutExecutor,
-  EdgeLabelPlacementStringValues,
-  NodeLabelPlacementStringValues,
 } from '@yfiles/yfiles';
 import licenseData from '../assets/license.json';
 import '../styles/ReactGraphComponent.css';
@@ -188,6 +186,8 @@ export function ReactGraphComponent() {
     alongEdgeTree,
     sideOfSideTree,
   };
+
+
 
   useLayoutEffect(() => {
     if (!graphComponentContainer.current) return;

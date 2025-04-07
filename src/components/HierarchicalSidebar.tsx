@@ -72,6 +72,7 @@ const HierarchicalSidebar = () => {
     setSideOfSide,
   } = useHierarchicalSideBarStore();
 
+
   return (
     <>
       <div className="flex items-center justify-between mb-2 w-full ">
