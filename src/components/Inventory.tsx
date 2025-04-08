@@ -17,7 +17,22 @@ const Inventory = () => {
       node.type === DeviceType.UNKNOWN
     ).length;
 
+    const routerCount = networkData.nodes.filter( node => 
+      node.type === DeviceType.ROUTER
+    ).length;
+
+    const loadBalancer = networkData.nodes.filter( node =>
+      node.type === DeviceType.LOAD_BALANCER
+    ).length;
+
+    const firewall = networkData.nodes.filter( node =>
+      node.type === DeviceType.FIREWALL
+    ).length;
+
     setSwitches(switchCount);
+    setRouters(routerCount);
+    setLoadBalancers(loadBalancer);
+    setFirewalls(firewall);
   }, [networkData])
 
   return (
@@ -26,10 +41,22 @@ const Inventory = () => {
         Device Inventory
       </div>
       <div className=" border border-[#1E5D78] rounded-b-lg p-1">
-        <div className="text-sm ml-2">Switches: {switches}</div>
-        <div className="text-sm ml-2">Routers: {routers}</div>
-        <div className="text-sm ml-2">Firewalls: {firewalls}</div>
-        <div className="text-sm ml-2">Load Balancers: {loadBalancers}</div>
+        <div className="text-sm ml-2 flex items-center justify-start">
+          <input type='checkbox'/>
+          <span className='ml-2'>Switches: {switches}</span>
+        </div>
+        <div className="text-sm ml-2 flex items-center justify-start">
+          <input type='checkbox'/>
+          <span className='ml-2'>Routers: {routers}</span>
+        </div>
+        <div className="text-sm ml-2 flex items-center justify-start">
+          <input type='checkbox'/>
+          <span className='ml-2'>Firewalls: {firewalls}</span>
+        </div>
+        <div className="text-sm ml-2 flex items-center justify-start">
+          <input type='checkbox'/>
+          <span className='ml-2'>Load Balancers: {loadBalancers}</span>
+        </div>
       </div>
     </div>
   )

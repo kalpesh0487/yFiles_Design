@@ -1,5 +1,5 @@
 import { GraphItemTypes, GraphViewerInputMode, IEdge, INode, Point } from "@yfiles/yfiles";
-import switches from '../assets/switches.jpg';
+import switches from '../assets/switch-2.jpg';
 import unknownDevice from '../assets/unknown-device.svg';
 import fatSwitch from '../assets/fat-switch.jpg';
 import backHaul from '../assets/Internet Cloud.png'

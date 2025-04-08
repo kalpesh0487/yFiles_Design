@@ -22,12 +22,11 @@ import {
   LabelEdgeSidesStringValues,
   LabelAlongEdgePlacementsStringValues,
   HierarchicalLayoutData,
-  ILabelOwner,
-  LabelAlongEdgePlacements,
   OrthogonalLayoutData,
-  CircularLayoutData,
   OrganicLayoutData,
-  TreeLayoutData
+  TreeLayoutData,
+  LabelAngleReferences,
+  FreeEdgeLabelModel
 } from '@yfiles/yfiles';
 import backhaulIcon from '../assets/Internet Cloud.png';
 import switchHalfGreen from '../assets/Red-4 5.png';
@@ -37,21 +36,19 @@ import switchDYellow from '../assets/Asset 11@2x.png';
 import switchDGreen from '../assets/Asset 11@2x (1).png';
 import Internet from '../assets/Internet Cloud (1).png';
 import WAN from '../assets/Internet Cloud (2).png';
-import { NetworkData } from '../types/types';
-import { mapAlongEdge, mapCircularEdgeRoutingPolicy, mapClusteringPolicy, mapEdgeRoutingStyle, mapEdgeSide, mapOrientationToLayoutOrientation, mapPartitioningPolicy, mapRecursiveEdgePolicy } from './mappingFunctions';
+import { LabelPlacementOrientation, NetworkData } from '../types/types';
+import { mapAlongEdge, mapCircularEdgeRoutingPolicy, mapClusteringPolicy, mapEdgeRoutingStyle, mapEdgeSide, mapLabelOrientationToAngleReference, mapOrientationToLayoutOrientation, mapPartitioningPolicy, mapRecursiveEdgePolicy } from './mappingFunctions';
 
 type EdgeLabelPlacementStringValues = "ignore" | "integrated" | "generic";
 type NodeLabelPlacementStringValues = "ignore" | "consider" | "generic";
 
 interface LayoutConfig {
-  // Hierarchical nodes
   nodeDistance?: number;
   nodeToEdgeDistance?: number;
   edgeDistance?: number;
   minimumLayerDistance?: number;
   stopDuration?: number;
   layoutOrientation?: string;
-  // Hierarchical edges
   edgeRoutingStyle?: HierarchicalLayoutRoutingStyle | string;
   backloopRouting?: boolean;
   automaticEdgeGrouping?: boolean;
@@ -68,14 +65,12 @@ interface LayoutConfig {
   uTurnSymmetry?: number;
   allowShortcuts?: boolean;
 
-  // hierarchical labels EdgeLabelPlacement | EdgeLabelPlacementStringValues
   edgeLabelPlacementHierarchical: EdgeLabelPlacement | EdgeLabelPlacementStringValues;
-  nodeLabelPlacementHierarchical: NodeLabelPlacement   | NodeLabelPlacementStringValues;
-  edgeOrientation: string,
-  alongEdge: LabelAlongEdgePlacementsStringValues,
-  sideOfSide: LabelEdgeSidesStringValues,
+  nodeLabelPlacementHierarchical: NodeLabelPlacement | NodeLabelPlacementStringValues;
+  edgeOrientation: LabelPlacementOrientation;
+  alongEdge: LabelAlongEdgePlacementsStringValues;
+  sideOfSide: LabelEdgeSidesStringValues;
 
-  // orgnic
   preferredEdgeLength?: number;
   minimumNodeDistance?: number;
   avoidNodeEdgeOverlap?: boolean;
@@ -83,52 +78,42 @@ interface LayoutConfig {
   organicOrientation?: string;
   clustering?: string;
 
-  // organic labels
-  edgeLabelPlacementOrganic : EdgeLabelPlacement | EdgeLabelPlacementStringValues,
-  nodeLabelPlacementOrganic : NodeLabelPlacement | NodeLabelPlacementStringValues,
-  edgeOrientationOrganic : string,
-  alongEdgeOrganic : string,
-  sideOfSideOrganic : string,
+  edgeLabelPlacementOrganic: EdgeLabelPlacement | EdgeLabelPlacementStringValues;
+  nodeLabelPlacementOrganic: NodeLabelPlacement | NodeLabelPlacementStringValues;
+  edgeOrientationOrganic: LabelPlacementOrientation; 
+  alongEdgeOrganic: LabelAlongEdgePlacementsStringValues;
+  sideOfSideOrganic: LabelEdgeSidesStringValues;
   
-  // Orthogonal general
   gridSpacing?: number;
   layoutMode?: string;
-  // Orthogonal edges
   minimumFirstSegmentLengthOrthogonal?: number;
   minimumSegmentLength?: number;
   minimumLastSegmentLengthOrthogonal?: number;
   routeSelectedEdgesDownwards?: boolean;
-  // orthogonal labels
-  edgeLabelPlacementOrthogonal:  EdgeLabelPlacement | EdgeLabelPlacementStringValues;
-  nodeLabelPlacementOrthogonal: NodeLabelPlacement   | NodeLabelPlacementStringValues;
-  edgeOrientationOrthogonal: string,
-  alongEdgeOrthogonal: string,
-  sideOfSideOrthogonal: string,
+  edgeLabelPlacementOrthogonal: EdgeLabelPlacement | EdgeLabelPlacementStringValues;
+  nodeLabelPlacementOrthogonal: NodeLabelPlacement | NodeLabelPlacementStringValues;
+  edgeOrientationOrthogonal: LabelPlacementOrientation; 
+  alongEdgeOrthogonal: LabelAlongEdgePlacementsStringValues;
+  sideOfSideOrthogonal: LabelEdgeSidesStringValues;
   
-  // circular nodes
   partitioningPolicy?: string;
   fromSketchMode?: boolean;
-  //circular edges
   enableEdgeBundling: boolean;
   bundlingStrength: number;
   edgeRoutingStyleCircular: string;
-  // circular labels
-  edgeLabelPlacementCircular:  RadialEdgeLabelPlacement | RadialEdgeLabelPlacementStringValues | undefined;
+  edgeLabelPlacementCircular: RadialEdgeLabelPlacement | RadialEdgeLabelPlacementStringValues | undefined;
   nodeLabelPlacementCircular: RadialNodeLabelPlacement | RadialNodeLabelPlacementStringValues | undefined;
-  edgeOrientationCircular: string,
-  alongEdgeCircular: string,
-  sideOfSideCircular: string,
+  edgeOrientationCircular: LabelPlacementOrientation; 
+  alongEdgeCircular: LabelAlongEdgePlacementsStringValues;
+  sideOfSideCircular: LabelEdgeSidesStringValues;
 
-  // tree
   treeOrientation?: string;
-
   edgeLabelPlacementTree: EdgeLabelPlacement | EdgeLabelPlacementStringValues;
-  nodeLabelPlacementTree: NodeLabelPlacement   | NodeLabelPlacementStringValues;
-  edgeOrientationTreeTree: string,
-  alongEdgeTree: string,
-  sideOfSideTree: string,
+  nodeLabelPlacementTree: NodeLabelPlacement | NodeLabelPlacementStringValues;
+  edgeOrientationTree: LabelPlacementOrientation;
+  alongEdgeTree: LabelAlongEdgePlacementsStringValues;
+  sideOfSideTree: LabelEdgeSidesStringValues;
 }
-
 
 export function createSampleGraph(graph: IGraph, layout: string, config: LayoutConfig, networkData: NetworkData): void {
   const nodeMap = new Map();
@@ -165,8 +150,8 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
     newNode.tag = { labelText, labelParameter, label, data: node };
     nodeMap.set(node.id, newNode);
   });
-  // ===============================================================================
-  
+
+  const edgeLabelModel = new FreeEdgeLabelModel();
 
   networkData.connections.forEach(edge => {
     const sourceNode = nodeMap.get(edge.source);
@@ -178,7 +163,7 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
 
       if (layout === 'Hierarchical') {
         edgeStyle = new PolylineEdgeStyle({
-          smoothingLength: 30,
+          // smoothingLength: 30,
         });
         
         edgeStyle.stroke = new Stroke({
@@ -191,7 +176,7 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
         }
       } else if (layout === 'Orthogonal') {
         edgeStyle = new PolylineEdgeStyle({
-          smoothingLength: 10,
+          // smoothingLength: 10,
         });
         
         edgeStyle.stroke = new Stroke({
@@ -201,7 +186,7 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
         });
       } else {
         edgeStyle = new PolylineEdgeStyle({
-          smoothingLength: 30,
+          // smoothingLength: 30,
         });
         
         edgeStyle.stroke = new Stroke({
@@ -214,7 +199,11 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
       graph.setStyle(graphEdge, edgeStyle);
 
       if (edge.label) {
-        const label = graph.addLabel(graphEdge, edge.label);
+        const label = graph.addLabel({
+          owner: graphEdge,
+          text: edge.label,
+          layoutParameter: edgeLabelModel.createParameter(),
+        });
         graph.setStyle(label, new LabelStyle({
           backgroundFill: '#B0D4FF',
           backgroundStroke: new Stroke({
@@ -225,14 +214,42 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
           padding: [5, 5, 5, 5],
           textSize: 10,
           textFill: '#000000',
+          autoFlip: false,
         }));
-        
       }
     }
   });
 
   let layoutAlgorithm;
   let layoutData;
+
+  const applyLabelOrientation = (descriptor: EdgeLabelPreferredPlacement, orientation: any) => {
+    switch (orientation) {
+      case 'Parallel':
+        descriptor.angle = 0.0;
+        descriptor.angleReference = LabelAngleReferences.RELATIVE_TO_EDGE_FLOW;
+        console.log("parallellaelelelelelellelelelelelelel",descriptor.angle);
+        break;
+      case 'Orthogonal':
+        descriptor.angle = Math.PI / 2;
+        descriptor.angleReference = LabelAngleReferences.RELATIVE_TO_EDGE_FLOW;
+        console.log("dadadaadadadadadadadadadadadadadadad",descriptor.angle);
+        break;
+      case 'Horizontal':
+        descriptor.angle = 0.0;
+        descriptor.angleReference = LabelAngleReferences.ABSOLUTE;
+        break;
+      case 'Vertical':
+        descriptor.angle = Math.PI / 2;
+        descriptor.angleReference = LabelAngleReferences.ABSOLUTE;
+        break;
+      default:
+        descriptor.angle = 0.0;
+        descriptor.angleReference = LabelAngleReferences.RELATIVE_TO_EDGE_FLOW;
+        break;
+    }
+  };
+
   
   if (layout === 'Hierarchical') {
     layoutAlgorithm = new HierarchicalLayout({
@@ -255,16 +272,17 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
       },
       edgeLabelPlacement: config.edgeLabelPlacementHierarchical as EdgeLabelPlacement,
       nodeLabelPlacement: config.nodeLabelPlacementHierarchical as NodeLabelPlacement,
+      
     });
   
     layoutData = new HierarchicalLayoutData({
-      edgeLabelPreferredPlacements: () => {
-        // const owner = label.owner;
-        const placement = new EdgeLabelPreferredPlacement({
+      edgeLabelPreferredPlacements: (label) => {
+        const descriptor = new EdgeLabelPreferredPlacement({
           placementAlongEdge: mapAlongEdge(config.alongEdge),
           edgeSide: mapEdgeSide(config.sideOfSide),
         });
-        return placement;
+        applyLabelOrientation(descriptor, config.edgeOrientation);
+        return descriptor;
       },
     });
   }
@@ -282,32 +300,41 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
     });
 
     layoutData = new OrthogonalLayoutData({
-      edgeLabelPreferredPlacements: () => {
-        // const owner = label.owner;
-        const placement = new EdgeLabelPreferredPlacement({
+      edgeLabelPreferredPlacements: (label) => {
+        const descriptor = new EdgeLabelPreferredPlacement({
           placementAlongEdge: mapAlongEdge(config.alongEdgeOrthogonal),
           edgeSide: mapEdgeSide(config.sideOfSideOrthogonal),
         });
-        return placement;
+        applyLabelOrientation(descriptor, config.edgeOrientationOrthogonal);
+        return descriptor;
       },
     });
   } else if (layout === 'Circular') {
     layoutAlgorithm = new CircularLayout({
       partitioningPolicy: mapPartitioningPolicy(config.partitioningPolicy || 'BCC Compact'),
       fromSketchMode: config.fromSketchMode || false,
-      
       edgeRoutingPolicy: mapCircularEdgeRoutingPolicy(config.edgeRoutingStyleCircular),
       edgeBundling: {
         bundlingStrength: config.bundlingStrength,
-        defaultBundleDescriptor : {
+        defaultBundleDescriptor: {
           bundled: config.enableEdgeBundling
         }
       },
       edgeLabelPlacement: config.edgeLabelPlacementCircular,
-      nodeLabelPlacement: config.nodeLabelPlacementCircular
+      nodeLabelPlacement: config.nodeLabelPlacementCircular,
     });
 
-    
+    layoutData = new OrganicLayoutData({ // Using OrganicLayoutData as a fallback since CircularLayoutData isn't standard
+      edgeLabelPreferredPlacements: (label) => {
+        const descriptor = new EdgeLabelPreferredPlacement({
+          placementAlongEdge: mapAlongEdge(config.alongEdgeCircular),
+          edgeSide: mapEdgeSide(config.sideOfSideCircular),
+          // autoRotation: true,
+        });
+        applyLabelOrientation(descriptor, config.edgeOrientationCircular);
+        return descriptor;
+      },
+    });
   } else if (layout === 'Organic') {
     layoutAlgorithm = new OrganicLayout({
       layoutOrientation: mapOrientationToLayoutOrientation(config.organicOrientation || 'Top to Bottom'),
@@ -317,39 +344,36 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
       compactnessFactor: config.compactness || 0.2,
       avoidNodeEdgeOverlap: config.avoidNodeEdgeOverlap || false,
       edgeLabelPlacement: config.edgeLabelPlacementOrganic,
-      nodeLabelPlacement: config.nodeLabelPlacementOrganic
+      nodeLabelPlacement: config.nodeLabelPlacementOrganic,
     });
 
     layoutData = new OrganicLayoutData({
-      edgeLabelPreferredPlacements: () => {
-        // const owner = label.owner;
-        const placement = new EdgeLabelPreferredPlacement({
+      edgeLabelPreferredPlacements: (label) => {
+        const descriptor = new EdgeLabelPreferredPlacement({
           placementAlongEdge: mapAlongEdge(config.alongEdgeOrganic),
           edgeSide: mapEdgeSide(config.sideOfSideOrganic),
+          // autoRotation: true,
         });
-        return placement;
+        applyLabelOrientation(descriptor, config.edgeOrientationOrganic);
+        return descriptor;
       },
     });
   } else if (layout === 'Tree') {
     layoutAlgorithm = new TreeLayout({
       layoutOrientation: mapOrientationToLayoutOrientation(config.treeOrientation || 'Top to Bottom'),
-      // defaultPortAssigner : 
-      // selfLoopRouter: {
-      //   routingStyle: 'rounded',
-      // },
       edgeLabelPlacement: config.edgeLabelPlacementTree,
       nodeLabelPlacement: config.nodeLabelPlacementTree,
-      
     });
 
     layoutData = new TreeLayoutData({
-      edgeLabelPreferredPlacements: () => {
-        // const owner = label.owner;
-        const placement = new EdgeLabelPreferredPlacement({
+      edgeLabelPreferredPlacements: (label) => {
+        const descriptor = new EdgeLabelPreferredPlacement({
           placementAlongEdge: mapAlongEdge(config.alongEdgeTree),
           edgeSide: mapEdgeSide(config.sideOfSideTree),
+          // autoRotation: true,
         });
-        return placement;
+        applyLabelOrientation(descriptor, config.edgeOrientationTree);
+        return descriptor;
       },
     });
   }
@@ -357,5 +381,4 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
   if (layoutAlgorithm) {
     graph.applyLayout(layoutAlgorithm, layoutData);
   }
-  
 }

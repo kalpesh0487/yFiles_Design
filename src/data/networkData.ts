@@ -11,7 +11,7 @@ const networkData: NetworkData = {
         { id: 'switch-4', label: 'switch-4', type: DeviceType.SWITCH, ip: '192.2.3.266', status: Status.WARNING },
         { id: 'switch-3', label: 'switch-3', type: DeviceType.SWITCH, ip: '192.2.3.266', status: Status.ACTIVE },
         { id: 'unknown2', label: 'Unkown2', type: DeviceType.UNKNOWN, ip: '192.2.3.56', status: Status.EMPTY },
-        // { id: 'unknown3', label: 'Unkown3', type: DeviceType.UNKNOWN, ip: '192.2.3.2356', status: Status.EMPTY },
+        // { id: 'unknown3', label: 'Unkown3', type: DeviceType.ROUTER, ip: '192.2.3.2356', status: Status.EMPTY },
 
         // right side
         { id: 'fat-switch-3', label: 'fat-switch-3', type: DeviceType.FAT_SWITCH, ip: '192.2.3.21', status: Status.WARNING },

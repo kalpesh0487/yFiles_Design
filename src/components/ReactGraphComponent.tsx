@@ -135,6 +135,7 @@ export function ReactGraphComponent() {
     edgeOrientation,
     alongEdge,
     sideOfSide,
+    
     // Organic
     preferredEdgeLength,
     minimumNodeDistance,

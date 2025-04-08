@@ -1,4 +1,5 @@
-import { CircularLayoutEdgeRoutingPolicy, CircularLayoutPartitioningPolicy, HierarchicalLayoutRoutingStyle, LabelAlongEdgePlacements, LabelEdgeSides, LayoutOrientation, OrganicLayoutClusteringPolicy, RecursiveEdgePolicy } from "@yfiles/yfiles"
+import { CircularLayoutEdgeRoutingPolicy, CircularLayoutPartitioningPolicy, HierarchicalLayoutRoutingStyle, LabelAlongEdgePlacements, LabelAngleReferences, LabelEdgeSides, LayoutOrientation, OrganicLayoutClusteringPolicy, RecursiveEdgePolicy } from "@yfiles/yfiles"
+import { LabelPlacementOrientation } from "../types/types";
 
 export function mapAlongEdge(along: string): LabelAlongEdgePlacements {
   
@@ -11,9 +12,9 @@ export function mapAlongEdge(along: string): LabelAlongEdgePlacements {
       return LabelAlongEdgePlacements.AT_TARGET;
     case 'Centered':
       return LabelAlongEdgePlacements.AT_CENTER;
-    case 'At Target':
+    case 'At Source Port':
       return LabelAlongEdgePlacements.AT_SOURCE_PORT;
-    case 'At Target':
+    case 'At Target Port':
         return LabelAlongEdgePlacements.AT_TARGET_PORT;
     case '':
     case undefined:
@@ -31,10 +32,8 @@ export function mapEdgeSide(side: string): LabelEdgeSides {
     case 'On Edge':
       return LabelEdgeSides.ON_EDGE; 
     case 'Left':
-    case 'left-of-edge':
       return LabelEdgeSides.LEFT_OF_EDGE; 
     case 'Right':
-    case 'right-of-edge':
       return LabelEdgeSides.RIGHT_OF_EDGE; 
     case 'Anywhere':
       return LabelEdgeSides.ANYWHERE;
@@ -139,5 +138,23 @@ export function mapEdgeSide(side: string): LabelEdgeSides {
         return CircularLayoutEdgeRoutingPolicy.AUTOMATIC;
       default:
         return CircularLayoutEdgeRoutingPolicy.$_enum; 
+    }
+  }
+
+  export function mapLabelOrientationToAngleReference(
+    orientation: any
+  ): LabelAngleReferences {
+    console.log('in functionn orientation --------------------', orientation);
+    switch (orientation) {
+      case 'Parallel':
+        return LabelAngleReferences.RELATIVE_TO_EDGE_FLOW;
+      case 'Orthogonal':
+        return LabelAngleReferences.RELATIVE_TO_EDGE_FLOW;
+      case 'Horizontal':
+        return LabelAngleReferences.ABSOLUTE;
+      case 'Vertical':
+        return LabelAngleReferences.ABSOLUTE;
+      default:
+        return LabelAngleReferences.RELATIVE_TO_EDGE_FLOW;
     }
   }

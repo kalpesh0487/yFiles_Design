@@ -4,7 +4,10 @@ export enum DeviceType {
     SWITCH = "switch",
     UNKNOWN = "unknown",
     INTERNET = "internet",
-    WAN = "WAN"
+    WAN = "WAN",
+    ROUTER = "router",
+    LOAD_BALANCER = "load-balancer",
+    FIREWALL = "firewall"
 }
 
 export enum Status {
@@ -34,4 +37,11 @@ export type Connection = {
 export type NetworkData = {
     nodes: Node[];
     connections: Connection[];
+};
+
+export enum LabelPlacementOrientation {
+    PARALLEL,
+    ORTHOGONAL,
+    HORIZONTAL,
+    VERTICAL
 };

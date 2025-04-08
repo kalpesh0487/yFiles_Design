@@ -58,6 +58,7 @@
   margin-bottom: 8px;
   background-blend-mode: color;
   overflow: hidden;
+  object-fit: contain;
 }
 
 .tooltip-table {

@@ -101,7 +101,7 @@ const useHierarchicalSideBarStore = create<HierarchicalSideBarState>((set) => ({
   automaticBusRouting: false,
   highlightCriticalPath: false,
   minimumFirstSegmentLength: 10,
-  minimumLastSegmentLength: 10,
+  minimumLastSegmentLength: 38,
   minimumEdgeLength: 10,
   minimumEdgeDistance: 10,
   minimumSlope: 10,
