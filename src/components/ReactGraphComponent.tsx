@@ -201,6 +201,8 @@ export function ReactGraphComponent() {
       gc.minimumZoom = 0.3;
       gc.maximumZoom = 3.0;
 
+      
+
       graphComponentRef.current = gc;
       graphComponentContainer.current.appendChild(gc.htmlElement);
 
@@ -319,7 +321,7 @@ export function ReactGraphComponent() {
 
   return (
     <div className="px-2 pt-2 pb-2">
-      <div className="graph-component-container" ref={graphComponentContainer} />
+      <div className="graph-component-container " ref={graphComponentContainer} />
       <div className="absolute bottom-4 left-4">
         <Inventory />
       </div>

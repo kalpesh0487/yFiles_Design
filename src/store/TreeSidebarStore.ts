@@ -47,7 +47,7 @@ const useTreeSideBarStore = create<TreeSideBarState>((set) => ({
   portAssignment: 'None',
   routingStyleForNonTreeEdges: 'Orthogonal',
 
-  edgeLabelPlacementTree: 'ignore',
+  edgeLabelPlacementTree: 'integrated',
   nodeLabelPlacementTree: 'consider',
   edgeOrientationTreeTree: '',
   alongEdgeTree: '',

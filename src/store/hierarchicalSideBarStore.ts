@@ -82,9 +82,9 @@ const useHierarchicalSideBarStore = create<HierarchicalSideBarState>((set) => ({
   isGeneralOpen: true,
   isEdgesOpen: false,
   isLabellingOpen: false,
-  duration: 50,
+  duration: 83,
   edgeToEdge: 17,
-  nodeToNode: 25,
+  nodeToNode: 35,
   nodeToEdge: 5,
   layerToLayer: 5,
   sample: 'Default',
@@ -114,7 +114,7 @@ const useHierarchicalSideBarStore = create<HierarchicalSideBarState>((set) => ({
   // labels
   edgeLabelPlacementHierarchical: 'ignore',
   nodeLabelPlacementHierarchical : 'consider',
-  edgeOrientation: '',
+  edgeOrientation: 'horizontal',
   alongEdge: 'At Target',
   sideOfSide: 'On Edge',
 

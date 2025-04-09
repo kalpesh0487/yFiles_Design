@@ -144,7 +144,6 @@ export function mapEdgeSide(side: string): LabelEdgeSides {
   export function mapLabelOrientationToAngleReference(
     orientation: any
   ): LabelAngleReferences {
-    console.log('in functionn orientation --------------------', orientation);
     switch (orientation) {
       case 'Parallel':
         return LabelAngleReferences.RELATIVE_TO_EDGE_FLOW;

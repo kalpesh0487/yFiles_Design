@@ -1,10 +1,10 @@
 import { 
-  ExteriorNodeLabelModel, 
-  HierarchicalLayout, 
+  ExteriorNodeLabelModel,
+  HierarchicalLayout,
   OrthogonalLayout,
-  IGraph, 
-  ImageNodeStyle, 
-  Stroke, 
+  IGraph,
+  ImageNodeStyle,
+  Stroke,
   CircularLayout,
   OrganicLayout,
   LabelStyle,
@@ -26,8 +26,10 @@ import {
   OrganicLayoutData,
   TreeLayoutData,
   LabelAngleReferences,
-  FreeEdgeLabelModel
+  FreeEdgeLabelModel,
+  ShapeNodeStyle 
 } from '@yfiles/yfiles';
+
 import backhaulIcon from '../assets/Internet Cloud.png';
 import switchHalfGreen from '../assets/Red-4 5.png';
 import switchHalfYellow from '../assets/Red-4 6.png';
@@ -37,7 +39,9 @@ import switchDGreen from '../assets/Asset 11@2x (1).png';
 import Internet from '../assets/Internet Cloud (1).png';
 import WAN from '../assets/Internet Cloud (2).png';
 import { LabelPlacementOrientation, NetworkData } from '../types/types';
-import { mapAlongEdge, mapCircularEdgeRoutingPolicy, mapClusteringPolicy, mapEdgeRoutingStyle, mapEdgeSide, mapLabelOrientationToAngleReference, mapOrientationToLayoutOrientation, mapPartitioningPolicy, mapRecursiveEdgePolicy } from './mappingFunctions';
+import { mapAlongEdge, mapCircularEdgeRoutingPolicy, mapClusteringPolicy, mapEdgeRoutingStyle, mapEdgeSide, mapOrientationToLayoutOrientation, mapPartitioningPolicy, mapRecursiveEdgePolicy } from './mappingFunctions';
+import '../styles/ReactGraphComponent.css';
+import '../index.css'
 
 type EdgeLabelPlacementStringValues = "ignore" | "integrated" | "generic";
 type NodeLabelPlacementStringValues = "ignore" | "consider" | "generic";
@@ -110,7 +114,7 @@ interface LayoutConfig {
   treeOrientation?: string;
   edgeLabelPlacementTree: EdgeLabelPlacement | EdgeLabelPlacementStringValues;
   nodeLabelPlacementTree: NodeLabelPlacement | NodeLabelPlacementStringValues;
-  edgeOrientationTree: LabelPlacementOrientation;
+  edgeOrientationTreeTree: LabelPlacementOrientation;
   alongEdgeTree: LabelAlongEdgePlacementsStringValues;
   sideOfSideTree: LabelEdgeSidesStringValues;
 }
@@ -161,41 +165,19 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
       const graphEdge = graph.createEdge(sourceNode, targetNode);
       let edgeStyle: PolylineEdgeStyle;
 
-      if (layout === 'Hierarchical') {
-        edgeStyle = new PolylineEdgeStyle({
-          // smoothingLength: 30,
-        });
-        
-        edgeStyle.stroke = new Stroke({
-          fill: edge.color || '#000000',
-          thickness: config.considerEdgeThickness ? 2.0 : 1.0,
-          dashStyle: edge.dashed ? 'dash' : 'solid',
-        });
-        if (config.arrowsDefineEdgeDirection) {
-          edgeStyle.targetArrow = 'default';
-        }
-      } else if (layout === 'Orthogonal') {
-        edgeStyle = new PolylineEdgeStyle({
-          // smoothingLength: 10,
-        });
-        
-        edgeStyle.stroke = new Stroke({
-          fill: edge.color || '#000000',
-          thickness: 2.4, 
-          dashStyle: edge.dashed ? 'dash' : 'solid',
-        });
-      } else {
-        edgeStyle = new PolylineEdgeStyle({
-          // smoothingLength: 30,
-        });
-        
-        edgeStyle.stroke = new Stroke({
-          fill: edge.color || '#000000',
-          thickness: 2.4,
-          dashStyle: edge.dashed ? 'dash' : 'solid',
-        });
+      edgeStyle = new PolylineEdgeStyle({
+        smoothingLength: 10,
+      });
+      
+      edgeStyle.stroke = new Stroke({
+        fill: edge.color || '#000000',
+        thickness: config.considerEdgeThickness ? 2.0 : 1.0,
+        dashStyle: edge.dashed ? 'dash' : 'solid',
+      });
+      if (config.arrowsDefineEdgeDirection) {
+        edgeStyle.targetArrow = 'default';
       }
-
+      
       graph.setStyle(graphEdge, edgeStyle);
 
       if (edge.label) {
@@ -228,12 +210,10 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
       case 'Parallel':
         descriptor.angle = 0.0;
         descriptor.angleReference = LabelAngleReferences.RELATIVE_TO_EDGE_FLOW;
-        console.log("parallellaelelelelelellelelelelelelel",descriptor.angle);
         break;
       case 'Orthogonal':
         descriptor.angle = Math.PI / 2;
         descriptor.angleReference = LabelAngleReferences.RELATIVE_TO_EDGE_FLOW;
-        console.log("dadadaadadadadadadadadadadadadadadad",descriptor.angle);
         break;
       case 'Horizontal':
         descriptor.angle = 0.0;
@@ -250,8 +230,41 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
     }
   };
 
-  
   if (layout === 'Hierarchical') {
+    const groupMap = new Map<string, any>(); 
+    if (networkData.groups && networkData.groups.length > 0) {
+      networkData.groups.forEach((group) => {
+        const groupNode = graph.createGroupNode();
+
+        const nodeStyle = new ShapeNodeStyle({
+          shape: 'round-rectangle', 
+          fill: '#E0E0E0', 
+          stroke: new Stroke('#000000', 0.3),
+          cssClass: 'group-node'
+        });
+        graph.setStyle(groupNode, nodeStyle);
+        console.log('Group Node Style CSS Class:', nodeStyle.cssClass);
+
+        const labelModel = new ExteriorNodeLabelModel();
+        const label = graph.addLabel({
+          owner: groupNode,
+          text: group.label!,
+          layoutParameter: labelModel.createParameter('bottom'),
+          style: new LabelStyle({
+            textFill: '#000000',
+            cssClass: 'group-tab',
+            textSize: 15
+          })
+        });
+
+        const nodesToGroup = group.nodeIds.map((nodeId) => nodeMap.get(nodeId)).filter(Boolean);
+        if (nodesToGroup.length > 0) {
+          graph.groupNodes(groupNode, nodesToGroup);
+        }
+        groupMap.set(group.id, groupNode);
+      });
+    }
+
     layoutAlgorithm = new HierarchicalLayout({
       layoutOrientation: mapOrientationToLayoutOrientation(config.layoutOrientation || 'Top to Bottom'),
       nodeDistance: config.nodeDistance || 25,
@@ -263,20 +276,20 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
         routingStyleDescriptor: {
           defaultRoutingStyle: mapEdgeRoutingStyle(config.edgeRoutingStyle),
         },
-        backLoopRouting: config.backloopRouting || false,
-        minimumFirstSegmentLength: config.minimumFirstSegmentLength || 10,
-        minimumLastSegmentLength: config.minimumLastSegmentLength || 10,
-        minimumLength: config.minimumEdgeLength || 10,
-        minimumDistance: config.minimumEdgeDistance || 10,
+        backLoopRouting: config.backloopRouting,
+        minimumFirstSegmentLength: config.minimumFirstSegmentLength,
+        minimumLastSegmentLength: config.minimumLastSegmentLength,
+        minimumLength: config.minimumEdgeLength,
+        minimumDistance: config.minimumEdgeDistance,
         recursiveEdgePolicy: mapRecursiveEdgePolicy(config.recursiveEdgeRoutingStyle),
       },
       edgeLabelPlacement: config.edgeLabelPlacementHierarchical as EdgeLabelPlacement,
       nodeLabelPlacement: config.nodeLabelPlacementHierarchical as NodeLabelPlacement,
-      
+      automaticEdgeGrouping : false
     });
   
     layoutData = new HierarchicalLayoutData({
-      edgeLabelPreferredPlacements: (label) => {
+      edgeLabelPreferredPlacements: () => {
         const descriptor = new EdgeLabelPreferredPlacement({
           placementAlongEdge: mapAlongEdge(config.alongEdge),
           edgeSide: mapEdgeSide(config.sideOfSide),
@@ -300,7 +313,7 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
     });
 
     layoutData = new OrthogonalLayoutData({
-      edgeLabelPreferredPlacements: (label) => {
+      edgeLabelPreferredPlacements: () => {
         const descriptor = new EdgeLabelPreferredPlacement({
           placementAlongEdge: mapAlongEdge(config.alongEdgeOrthogonal),
           edgeSide: mapEdgeSide(config.sideOfSideOrthogonal),
@@ -324,12 +337,11 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
       nodeLabelPlacement: config.nodeLabelPlacementCircular,
     });
 
-    layoutData = new OrganicLayoutData({ // Using OrganicLayoutData as a fallback since CircularLayoutData isn't standard
-      edgeLabelPreferredPlacements: (label) => {
+    layoutData = new OrganicLayoutData({ 
+      edgeLabelPreferredPlacements: () => {
         const descriptor = new EdgeLabelPreferredPlacement({
           placementAlongEdge: mapAlongEdge(config.alongEdgeCircular),
           edgeSide: mapEdgeSide(config.sideOfSideCircular),
-          // autoRotation: true,
         });
         applyLabelOrientation(descriptor, config.edgeOrientationCircular);
         return descriptor;
@@ -348,11 +360,10 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
     });
 
     layoutData = new OrganicLayoutData({
-      edgeLabelPreferredPlacements: (label) => {
+      edgeLabelPreferredPlacements: () => {
         const descriptor = new EdgeLabelPreferredPlacement({
           placementAlongEdge: mapAlongEdge(config.alongEdgeOrganic),
           edgeSide: mapEdgeSide(config.sideOfSideOrganic),
-          // autoRotation: true,
         });
         applyLabelOrientation(descriptor, config.edgeOrientationOrganic);
         return descriptor;
@@ -366,13 +377,12 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
     });
 
     layoutData = new TreeLayoutData({
-      edgeLabelPreferredPlacements: (label) => {
+      edgeLabelPreferredPlacements: () => {
         const descriptor = new EdgeLabelPreferredPlacement({
           placementAlongEdge: mapAlongEdge(config.alongEdgeTree),
           edgeSide: mapEdgeSide(config.sideOfSideTree),
-          // autoRotation: true,
         });
-        applyLabelOrientation(descriptor, config.edgeOrientationTree);
+        applyLabelOrientation(descriptor, config.edgeOrientationTreeTree);
         return descriptor;
       },
     });

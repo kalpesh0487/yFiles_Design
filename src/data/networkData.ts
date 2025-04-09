@@ -1,5 +1,5 @@
 import { DeviceType, NetworkData, Status } from "../types/types";
-
+          
 const networkData: NetworkData = {
     nodes: [
         { id: 'backhaul', label: 'BACKHAUL', type: DeviceType.BACKHAUL, ip: '192.2.3.256', status: Status.EMPTY },
@@ -12,7 +12,7 @@ const networkData: NetworkData = {
         { id: 'switch-3', label: 'switch-3', type: DeviceType.SWITCH, ip: '192.2.3.266', status: Status.ACTIVE },
         { id: 'unknown2', label: 'Unkown2', type: DeviceType.UNKNOWN, ip: '192.2.3.56', status: Status.EMPTY },
         // { id: 'unknown3', label: 'Unkown3', type: DeviceType.ROUTER, ip: '192.2.3.2356', status: Status.EMPTY },
-
+          
         // right side
         { id: 'fat-switch-3', label: 'fat-switch-3', type: DeviceType.FAT_SWITCH, ip: '192.2.3.21', status: Status.WARNING },
         { id: 'fat-switch-4', label: 'fat-switch-4', type: DeviceType.FAT_SWITCH, ip: '192.2.3.23', status: Status.ACTIVE },
@@ -52,16 +52,51 @@ const networkData: NetworkData = {
         { source: 'fat-switch-2', target: 'switch-11', color: '#000000', dashed: false, label: '100 Gb/s', status: Status.INACTIVE },
         { source: 'fat-switch-2', target: 'switch-12', color: '#000000', dashed: false, label: '', status: Status.INACTIVE },
         { source: 'switch-12', target: 'unknow4', color: '#000000', dashed: false, label: '', status: Status.INACTIVE },
+        { source: 'fat-switch-2', target: 'G2', color: '#000000', dashed: false, label: '100 Gb/s', status: Status.INACTIVE },
 
         // MCLAG 
-        // { source: 'fat-switch-3', target: 'fat-switch-4', color: '#000000', dashed: true, label: 'MCLAG', status: Status.INACTIVE },
-        // { source: 'switch-7', target: 'switch-10', color: '#000000', dashed: true, label: 'MCLAG', status: Status.INACTIVE },
-        // { source: 'switch-8', target: 'switch-9', color: '#000000', dashed: true, label: 'MCLAG', status: Status.INACTIVE },
-        // { source: 'switch-1', target: 'switch-2', color: '#000000', dashed: true, label: 'MCLAG', status: Status.INACTIVE },
-        // { source: 'switch-3', target: 'switch-4', color: '#000000', dashed: true, label: 'MCLAG', status: Status.INACTIVE },
-        // { source: 'fat-switch-2', target: 'fat-switch-1', color: '#000000', dashed: true, label: 'MCLAG', status: Status.INACTIVE },
-        // { source: 'switch-5', target: 'switch-6', color: '#000000', dashed: true, label: 'MCLAG', status: Status.INACTIVE },
-    ],
-};
-
+          // { source: 'fat-switch-3', target: 'fat-switch-4', color: '#000000', dashed: true, label: 'MCLAG', status: Status.INACTIVE },
+          // { source: 'switch-7', target: 'switch-10', color: '#000000', dashed: true, label: 'MCLAG', status: Status.INACTIVE },
+          // { source: 'switch-8', target: 'switch-9', color: '#000000', dashed: true, label: 'MCLAG', status: Status.INACTIVE },
+          // { source: 'switch-1', target: 'switch-2', color: '#000000', dashed: true, label: 'MCLAG', status: Status.INACTIVE },
+          // { source: 'switch-3', target: 'switch-4', color: '#000000', dashed: true, label: 'MCLAG', status: Status.INACTIVE },
+          // { source: 'fat-switch-2', target: 'fat-switch-1', color: '#000000', dashed: true, label: 'MCLAG', status: Status.INACTIVE },
+          // { source: 'switch-5', target: 'switch-6', color: '#000000', dashed: true, label: 'MCLAG', status: Status.INACTIVE },
+    ], 
+    groups: [
+        {
+          id: 'G1',
+          nodeIds: [
+            'switch-1',
+            'switch-2',
+          ],
+          label: 'Switches Group 1',
+        },
+        {
+            id: 'G2',
+            nodeIds: [
+              'switch-3',
+              'switch-4',
+            ],
+            label: 'Switches Group 2',
+        },
+        {
+          id: 'G3',
+          nodeIds: [
+            'switch-7',
+            'switch-10',
+          ],
+          label: 'Switches Group 3',
+        },
+        {
+            id: 'G4',
+            nodeIds: [
+              'switch-9',
+              'switch-8',
+            ],
+            label: 'Switches Group 4',
+        },
+      ],    
+};         
+          
 export default networkData;

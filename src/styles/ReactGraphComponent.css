@@ -73,3 +73,29 @@
   border: 0.2px solid #130d0d;
   padding: 6px;
 }
+
+
+
+
+.group-node {
+  fill: #b5afb4;
+  stroke: rgb(6, 6, 7);
+  stroke-width: 1px;
+}
+
+.group-tab {
+  fill: #ffa74f;
+  stroke: rgb(85, 74, 74);
+  stroke-width: 0.2px;
+}
+
+
+.yfiles-node.group-node:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+}
+
+
+.yfiles-label.group-tab .label-content {
+  margin: 0;
+  padding: 0;
+}

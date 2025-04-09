@@ -10,7 +10,8 @@ interface NetworkState {
 export const useNetworkStore = create<NetworkState>((set) => ({
     networkData: {
       nodes: [],
-      connections: []
+      connections: [],
+      groups: []
     },
     setNetworkData: (data: NetworkData) => set({ networkData: data }),
 }));

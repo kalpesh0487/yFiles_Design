@@ -34,9 +34,16 @@ export type Connection = {
     status: Status;
 };
 
+export interface NetworkGroup {
+    id: string; 
+    nodeIds: string[]; 
+    label?: string;  
+}
+
 export type NetworkData = {
     nodes: Node[];
     connections: Connection[];
+    groups: NetworkGroup[]
 };
 
 export enum LabelPlacementOrientation {
