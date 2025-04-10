@@ -128,7 +128,6 @@ interface LayoutConfig {
 
 export function createSampleGraph(graph: IGraph, layout: string, config: LayoutConfig, networkData: NetworkData): void {
   const nodeMap = new Map();
-  console.log("Network data filtered: ",networkData);
   networkData.nodes.forEach((node) => {
     const newNode = graph.createNodeAt({ location: [0, 0] });
     let iconPath;
@@ -147,7 +146,13 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
     } else if (node.type === 'firewall'){
       iconPath = node.status === 'warning' ? fireWallYellow : fireWallRed;
     } else if (node.type === 'load-balancer'){
-      iconPath = node.status === 'warning' ? loadBalancerYellow : loadBalancerGreen;
+      if(node.status === 'warning'){
+        iconPath = loadBalancerYellow;
+      } else if(node.status === 'active'){
+        iconPath = loadBalancerGreen;
+      } else if(node.status === 'inactive'){
+        iconPath = loadBalancerRed;
+      }
     }
     
     const nodeStyle = new ImageNodeStyle({ href: iconPath, aspectRatio: 1 });
@@ -251,10 +256,10 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
           shape: 'round-rectangle', 
           fill: '#E0E0E0', 
           stroke: new Stroke('#000000', 0.3),
-          cssClass: 'group-node'
+          cssClass: 'group-node',
+          
         });
         graph.setStyle(groupNode, nodeStyle);
-        console.log('Group Node Style CSS Class:', nodeStyle.cssClass);
 
         const labelModel = new ExteriorNodeLabelModel();
         const label = graph.addLabel({

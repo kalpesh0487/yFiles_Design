@@ -205,16 +205,12 @@ export function ReactGraphComponent() {
     ),
   ];
 
-  console.log("Filtered Nodes:", filteredNodes); // Debug log to verify filtering
-
-  // Filter connections based on filtered nodes
   const filteredConnections = networkData.connections.filter(
     (conn) =>
       filteredNodes.some((node) => node.id === conn.source) &&
       filteredNodes.some((node) => node.id === conn.target)
   );
 
-  // Filter groups based on filtered nodes
   const filteredGroups = networkData.groups.filter((group) =>
     group.nodeIds.some((nodeId) => filteredNodes.some((node) => node.id === nodeId))
   );
