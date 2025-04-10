@@ -11,8 +11,14 @@ const networkData: NetworkData = {
         { id: 'switch-4', label: 'switch-4', type: DeviceType.SWITCH, ip: '192.2.3.266', status: Status.WARNING },
         { id: 'switch-3', label: 'switch-3', type: DeviceType.SWITCH, ip: '192.2.3.266', status: Status.ACTIVE },
         { id: 'unknown2', label: 'Unkown2', type: DeviceType.UNKNOWN, ip: '192.2.3.56', status: Status.EMPTY },
-        // { id: 'unknown3', label: 'Unkown3', type: DeviceType.ROUTER, ip: '192.2.3.2356', status: Status.EMPTY },
-          
+        { id: 'firewall-1', label: 'Firewall-1', type: DeviceType.FIREWALL, ip: '192.2.31.56', status: Status.WARNING },
+        { id: 'firewall-2', label: 'Firewall-2', type: DeviceType.FIREWALL, ip: '192.89.3.56', status: Status.INACTIVE },
+        
+        { id: 'loadBalancer-1', label: 'LoadBalancer-1', type: DeviceType.LOAD_BALANCER, ip: '192.89.3.56', status: Status.INACTIVE },
+        { id: 'loadBalancer-2', label: 'LoadBalancer-2', type: DeviceType.LOAD_BALANCER, ip: '192.89.3.56', status: Status.WARNING },
+        { id: 'loadBalancer-3', label: 'LoadBalancer-3', type: DeviceType.LOAD_BALANCER, ip: '192.89.3.56', status: Status.ACTIVE },
+        { id: 'loadBalancer-4', label: 'LoadBalancer-4', type: DeviceType.LOAD_BALANCER, ip: '192.89.3.56', status: Status.ACTIVE },
+        
         // right side
         { id: 'fat-switch-3', label: 'fat-switch-3', type: DeviceType.FAT_SWITCH, ip: '192.2.3.21', status: Status.WARNING },
         { id: 'fat-switch-4', label: 'fat-switch-4', type: DeviceType.FAT_SWITCH, ip: '192.2.3.23', status: Status.ACTIVE },
@@ -28,6 +34,8 @@ const networkData: NetworkData = {
         { id: 'Internet', label: 'Internet', type: DeviceType.INTERNET, ip: '192.3.4.88', status: Status.EMPTY },
         { id: 'WAN', label: 'WAN', type: DeviceType.WAN, ip: '192.3.5.98', status: Status.EMPTY },
         { id: 'unknow4', label: 'Unkown4', type: DeviceType.UNKNOWN, ip: '192.2.3.86', status: Status.EMPTY },
+        
+
     ],
     connections: [
         { source: 'backhaul', target: 'fat-switch-2', color: '#f5a623', dashed: false, label: '', status: Status.INACTIVE },
@@ -95,6 +103,24 @@ const networkData: NetworkData = {
               'switch-8',
             ],
             label: 'Switches Group 4',
+        },
+        {
+          id: 'G5',
+          nodeIds: [
+            'firewall-1',
+            'firewall-2',
+          ],
+          label: 'Switches Group 5',
+        },
+        {
+          id: 'G6',
+          nodeIds: [
+            'loadBalancer-1',
+            'loadBalancer-2',
+            'loadBalancer-3',
+            'loadBalancer-4'
+          ],
+          label: 'Switches Group 6',
         },
       ],    
 };         

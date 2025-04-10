@@ -2,9 +2,11 @@ import { GraphItemTypes, GraphViewerInputMode, IEdge, INode, Point } from "@yfil
 import switches from '../assets/switch-2.jpg';
 import unknownDevice from '../assets/unknown-device.svg';
 import fatSwitch from '../assets/fat-switch.jpg';
-import backHaul from '../assets/Internet Cloud.png'
-import Internet from '../assets/Internet Cloud (1).png'
-import WAN from '../assets/Internet Cloud (2).png'
+import backHaul from '../assets/Internet Cloud.png';
+import Internet from '../assets/Internet Cloud (1).png';
+import WAN from '../assets/Internet Cloud (2).png';
+import fireWall from '../assets/firewallImage.png';
+import loadBalancer from '../assets/load Balancer 2.jpg';
 import { DeviceType } from "../types/types";
 
 export function initializeToolTips(graphInputMode: GraphViewerInputMode): void {
@@ -38,6 +40,12 @@ export function initializeToolTips(graphInputMode: GraphViewerInputMode): void {
               break;
             case DeviceType.INTERNET:
               imgSrc = Internet;
+              break;
+            case DeviceType.FIREWALL:
+              imgSrc = fireWall;
+              break;
+            case DeviceType.LOAD_BALANCER:
+              imgSrc = loadBalancer;
               break;
             default:
               imgSrc = '';

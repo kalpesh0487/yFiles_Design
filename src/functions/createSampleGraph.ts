@@ -38,7 +38,14 @@ import switchDYellow from '../assets/Asset 11@2x.png';
 import switchDGreen from '../assets/Asset 11@2x (1).png';
 import Internet from '../assets/Internet Cloud (1).png';
 import WAN from '../assets/Internet Cloud (2).png';
-import { LabelPlacementOrientation, NetworkData } from '../types/types';
+
+import fireWallYellow from '../assets/Red-4 4.png';
+import fireWallRed from '../assets/Red-4 1.png';
+import loadBalancerRed from '../assets/Asset 11@2x (5).png';
+import loadBalancerYellow from '../assets/Asset 11@2x (4).png';
+import loadBalancerGreen from '../assets/Asset 11@2x (3).png';
+
+import { DeviceType, LabelPlacementOrientation, NetworkData } from '../types/types';
 import { mapAlongEdge, mapCircularEdgeRoutingPolicy, mapClusteringPolicy, mapEdgeRoutingStyle, mapEdgeSide, mapOrientationToLayoutOrientation, mapPartitioningPolicy, mapRecursiveEdgePolicy } from './mappingFunctions';
 import '../styles/ReactGraphComponent.css';
 import '../index.css'
@@ -121,7 +128,7 @@ interface LayoutConfig {
 
 export function createSampleGraph(graph: IGraph, layout: string, config: LayoutConfig, networkData: NetworkData): void {
   const nodeMap = new Map();
-
+  console.log("Network data filtered: ",networkData);
   networkData.nodes.forEach((node) => {
     const newNode = graph.createNodeAt({ location: [0, 0] });
     let iconPath;
@@ -137,6 +144,10 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
       iconPath = Internet;
     } else if (node.type === 'WAN') {
       iconPath = WAN;
+    } else if (node.type === 'firewall'){
+      iconPath = node.status === 'warning' ? fireWallYellow : fireWallRed;
+    } else if (node.type === 'load-balancer'){
+      iconPath = node.status === 'warning' ? loadBalancerYellow : loadBalancerGreen;
     }
     
     const nodeStyle = new ImageNodeStyle({ href: iconPath, aspectRatio: 1 });

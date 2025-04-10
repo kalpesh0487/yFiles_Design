@@ -17,6 +17,8 @@ import useTreeSideBarStore from '../store/TreeSidebarStore';
 import Inventory from './Inventory';
 import { useNetworkStore } from '../store/dataStore';
 import useSideBarStore from '../store/sideBarStore';
+import { useDeviceSelectionStore } from '../store/deviceSelectionStore';
+import { DeviceType } from '../types/types';
 
 export function ReactGraphComponent() {
   const graphComponentContainer = useRef<HTMLDivElement>(null);
@@ -25,6 +27,7 @@ export function ReactGraphComponent() {
 
   const { layout } = useSideBarStore();
   const networkData = useNetworkStore((state) => state.networkData);
+  const { selectedDevices } = useDeviceSelectionStore();
   const {
     duration,
     edgeToEdge,
@@ -188,7 +191,39 @@ export function ReactGraphComponent() {
     sideOfSideTree,
   };
 
+  const filteredNodes = [
+    ...networkData.nodes.filter((node) =>
+      node.type === DeviceType.BACKHAUL ||
+      node.type === DeviceType.INTERNET ||
+      node.type === DeviceType.WAN
+    ),
+    ...networkData.nodes.filter((node) =>
+      (node.type === DeviceType.SWITCH || node.type === DeviceType.FAT_SWITCH || node.type === DeviceType.UNKNOWN) && selectedDevices[DeviceType.SWITCH] ||
+      node.type === DeviceType.ROUTER && selectedDevices[DeviceType.ROUTER] ||
+      node.type === DeviceType.FIREWALL && selectedDevices[DeviceType.FIREWALL] ||
+      node.type === DeviceType.LOAD_BALANCER && selectedDevices[DeviceType.LOAD_BALANCER]
+    ),
+  ];
 
+  console.log("Filtered Nodes:", filteredNodes); // Debug log to verify filtering
+
+  // Filter connections based on filtered nodes
+  const filteredConnections = networkData.connections.filter(
+    (conn) =>
+      filteredNodes.some((node) => node.id === conn.source) &&
+      filteredNodes.some((node) => node.id === conn.target)
+  );
+
+  // Filter groups based on filtered nodes
+  const filteredGroups = networkData.groups.filter((group) =>
+    group.nodeIds.some((nodeId) => filteredNodes.some((node) => node.id === nodeId))
+  );
+
+  const filteredNetworkData = {
+    nodes: filteredNodes,
+    connections: filteredConnections,
+    groups: filteredGroups,
+  };
 
   useLayoutEffect(() => {
     if (!graphComponentContainer.current) return;
@@ -212,7 +247,7 @@ export function ReactGraphComponent() {
 
     const graphComponent = graphComponentRef.current!;
     
-    createSampleGraph(graphComponent.graph, layout, layoutConfig, networkData);
+    createSampleGraph(graphComponent.graph, layout, layoutConfig, filteredNetworkData);
 
     graphComponent.graph.nodes.forEach((node) => {
       const { label, labelText, labelParameter } = node.tag || {};
@@ -317,6 +352,7 @@ export function ReactGraphComponent() {
     edgeRoutingStyleCircular,
     treeOrientation,
     networkData,
+    selectedDevices
   ]);
 
   return (
