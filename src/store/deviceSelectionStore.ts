@@ -1,4 +1,3 @@
-// src/store/deviceSelectionStore.ts
 import { create } from 'zustand';
 import { DeviceType } from '../types/types';
 
@@ -10,15 +9,15 @@ interface DeviceSelectionState {
 
 export const useDeviceSelectionStore = create<DeviceSelectionState>((set) => ({
   selectedDevices: {
-    [DeviceType.BACKHAUL]: true,    // Always true
-    [DeviceType.FAT_SWITCH]: true,  // Initially true
-    [DeviceType.SWITCH]: true,      // Initially true
-    [DeviceType.ROUTER]: true,      // Initially true
-    [DeviceType.FIREWALL]: true,    // Initially true
-    [DeviceType.LOAD_BALANCER]: true, // Initially true
-    [DeviceType.INTERNET]: true,    // Always true
-    [DeviceType.WAN]: true,         // Always true
-    [DeviceType.UNKNOWN]: true,     // Initially true
+    [DeviceType.BACKHAUL]: true,    
+    [DeviceType.FAT_SWITCH]: true,  
+    [DeviceType.SWITCH]: true,      
+    [DeviceType.ROUTER]: true,      
+    [DeviceType.FIREWALL]: true,    
+    [DeviceType.LOAD_BALANCER]: true, 
+    [DeviceType.INTERNET]: true,    
+    [DeviceType.WAN]: true,         
+    [DeviceType.UNKNOWN]: true,     
   },
   toggleDevice: (deviceType: DeviceType) =>
     set((state) => {
@@ -40,15 +39,15 @@ export const useDeviceSelectionStore = create<DeviceSelectionState>((set) => ({
   resetSelection: () =>
     set({
       selectedDevices: {
-        [DeviceType.BACKHAUL]: true,    // Always true
-        [DeviceType.FAT_SWITCH]: true,  // Reset to true
-        [DeviceType.SWITCH]: true,      // Reset to true
-        [DeviceType.ROUTER]: true,      // Reset to true
-        [DeviceType.FIREWALL]: true,    // Reset to true
-        [DeviceType.LOAD_BALANCER]: true, // Reset to true
-        [DeviceType.INTERNET]: true,    // Always true
-        [DeviceType.WAN]: true,         // Always true
-        [DeviceType.UNKNOWN]: true,     // Reset to true
+        [DeviceType.BACKHAUL]: true, 
+        [DeviceType.FAT_SWITCH]: true,
+        [DeviceType.SWITCH]: true,    
+        [DeviceType.ROUTER]: true,    
+        [DeviceType.FIREWALL]: true,  
+        [DeviceType.LOAD_BALANCER]: true, 
+        [DeviceType.INTERNET]: true,    
+        [DeviceType.WAN]: true,         
+        [DeviceType.UNKNOWN]: true,
       },
     }),
 }));

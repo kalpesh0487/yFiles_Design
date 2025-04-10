@@ -76,9 +76,6 @@ export function initializeToolTips(graphInputMode: GraphViewerInputMode): void {
         }
       }
     });
-
-    // adding image to node if needed -: 
-    // <img src="${tooltipImage}" alt="Node Icon" style="max-width: 500px; max-height: 500px;" /> 
   
     graphInputMode.toolTipInputMode.toolTipLocationOffset = new Point(2, 14);
     graphInputMode.toolTipInputMode.duration = '10s';

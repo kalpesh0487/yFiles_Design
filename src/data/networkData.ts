@@ -63,13 +63,13 @@ const networkData: NetworkData = {
         { source: 'fat-switch-2', target: 'G2', color: '#000000', dashed: false, label: '100 Gb/s', status: Status.INACTIVE },
 
         // MCLAG 
-          // { source: 'fat-switch-3', target: 'fat-switch-4', color: '#000000', dashed: true, label: 'MCLAG', status: Status.INACTIVE },
-          // { source: 'switch-7', target: 'switch-10', color: '#000000', dashed: true, label: 'MCLAG', status: Status.INACTIVE },
-          // { source: 'switch-8', target: 'switch-9', color: '#000000', dashed: true, label: 'MCLAG', status: Status.INACTIVE },
-          // { source: 'switch-1', target: 'switch-2', color: '#000000', dashed: true, label: 'MCLAG', status: Status.INACTIVE },
-          // { source: 'switch-3', target: 'switch-4', color: '#000000', dashed: true, label: 'MCLAG', status: Status.INACTIVE },
-          // { source: 'fat-switch-2', target: 'fat-switch-1', color: '#000000', dashed: true, label: 'MCLAG', status: Status.INACTIVE },
-          // { source: 'switch-5', target: 'switch-6', color: '#000000', dashed: true, label: 'MCLAG', status: Status.INACTIVE },
+        { source: 'fat-switch-3', target: 'fat-switch-4', color: '#000000', dashed: true, label: 'MCLAG', status: Status.INACTIVE },
+        { source: 'switch-7', target: 'switch-10', color: '#000000', dashed: true, label: 'MCLAG', status: Status.INACTIVE },
+        { source: 'switch-8', target: 'switch-9', color: '#000000', dashed: true, label: 'MCLAG', status: Status.INACTIVE },
+        { source: 'switch-1', target: 'switch-2', color: '#000000', dashed: true, label: 'MCLAG', status: Status.INACTIVE },
+        { source: 'switch-3', target: 'switch-4', color: '#000000', dashed: true, label: 'MCLAG', status: Status.INACTIVE },
+        { source: 'fat-switch-2', target: 'fat-switch-1', color: '#000000', dashed: true, label: 'MCLAG', status: Status.INACTIVE },
+        { source: 'switch-5', target: 'switch-6', color: '#000000', dashed: true, label: 'MCLAG', status: Status.INACTIVE },
     ], 
     groups: [
         {

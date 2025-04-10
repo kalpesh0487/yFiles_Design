@@ -1,4 +1,3 @@
-// src/components/Inventory.tsx
 import { useEffect, useState } from 'react';
 import { useNetworkStore } from '../store/dataStore';
 import { DeviceType } from '../types/types';
