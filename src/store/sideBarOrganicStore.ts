@@ -59,10 +59,10 @@ const useOrganicSideBarStore = create<OrganicSideBarState>((set) => ({
   sample: 'default',
   preset: 'default',
   scope: 'all',
-  preferredEdgeLength: 10,
-  minimumNodeDistance: 20,
+  preferredEdgeLength: 80,
+  minimumNodeDistance: 50,
   avoidNodeEdgeOverlap: false,
-  compactness: 80,
+  compactness: 12,
   orientation: 'none',
   clustering: 'none',
 

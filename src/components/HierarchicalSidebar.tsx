@@ -36,6 +36,7 @@ const HierarchicalSidebar = () => {
     edgeOrientation,
     alongEdge,
     sideOfSide,
+    sampleHierarchical,
     toggleGeneral,
     toggleEdges,
     toggleLabelling,
@@ -70,6 +71,7 @@ const HierarchicalSidebar = () => {
     setEdgeOrientation,
     setAlongEdge,
     setSideOfSide,
+    setSampleHierarchical
   } = useHierarchicalSideBarStore();
 
 
@@ -79,13 +81,17 @@ const HierarchicalSidebar = () => {
         <label className="text-sm text-black whitespace-nowrap flex items-center">Sample</label>
         <select
           value={sample}
-          onChange={(e) => setSample(e.target.value)}
+          onChange={(e) => {
+            const selectedValue = e.target.value;
+            setSample(selectedValue);
+            setSampleHierarchical(selectedValue === 'Grouping');
+          }}
           className="w-55 p-0.5 border text-[15px] cursor-pointer rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option>Default</option>
           <option>Grouping</option>
-          <option>Bus Structures</option>
-          <option>Registration Flowchart</option>
+          {/* <option>Bus Structures</option>
+          <option>Registration Flowchart</option> */}
         </select>
       </div>
 

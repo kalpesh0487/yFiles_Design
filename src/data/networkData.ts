@@ -34,7 +34,6 @@ const networkData: NetworkData = {
         { id: 'Internet', label: 'Internet', type: DeviceType.INTERNET, ip: '192.3.4.88', status: Status.EMPTY },
         { id: 'WAN', label: 'WAN', type: DeviceType.WAN, ip: '192.3.5.98', status: Status.EMPTY },
         { id: 'unknow4', label: 'Unkown4', type: DeviceType.UNKNOWN, ip: '192.2.3.86', status: Status.EMPTY },
-        
 
     ],
     connections: [
@@ -60,7 +59,7 @@ const networkData: NetworkData = {
         { source: 'fat-switch-2', target: 'switch-11', color: '#000000', dashed: false, label: '100 Gb/s', status: Status.INACTIVE },
         { source: 'fat-switch-2', target: 'switch-12', color: '#000000', dashed: false, label: '', status: Status.INACTIVE },
         { source: 'switch-12', target: 'unknow4', color: '#000000', dashed: false, label: '', status: Status.INACTIVE },
-        { source: 'fat-switch-2', target: 'G2', color: '#000000', dashed: false, label: '100 Gb/s', status: Status.INACTIVE },
+        // { source: 'fat-switch-2', target: 'G2', color: '#000000', dashed: false, label: '100 Gb/s', status: Status.INACTIVE },
 
         // MCLAG 
         { source: 'fat-switch-3', target: 'fat-switch-4', color: '#000000', dashed: true, label: 'MCLAG', status: Status.INACTIVE },
@@ -70,6 +69,12 @@ const networkData: NetworkData = {
         { source: 'switch-3', target: 'switch-4', color: '#000000', dashed: true, label: 'MCLAG', status: Status.INACTIVE },
         { source: 'fat-switch-2', target: 'fat-switch-1', color: '#000000', dashed: true, label: 'MCLAG', status: Status.INACTIVE },
         { source: 'switch-5', target: 'switch-6', color: '#000000', dashed: true, label: 'MCLAG', status: Status.INACTIVE },
+
+        // node to group
+        { source: 'switch-5', target: 'G5', color: '#FF7ACA', dashed: false, label: '', status: Status.INACTIVE },
+        { source: 'switch-6', target: 'G5', color: '#FF7ACA', dashed: false, label: '', status: Status.INACTIVE },
+        { source: 'switch-6', target: 'G6', color: '#5FB4D6', dashed: false, label: '', status: Status.INACTIVE },
+        { source: 'switch-5', target: 'G6', color: '#5FB4D6', dashed: false, label: '', status: Status.INACTIVE },
     ], 
     groups: [
         {

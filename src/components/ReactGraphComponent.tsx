@@ -50,6 +50,7 @@ export function ReactGraphComponent() {
     recursiveEdgeRoutingStyle,
     uTurnSymmetry,
     allowShortcuts,
+    sampleHierarchical,
     // edges
     edgeLabelPlacementHierarchical,
     nodeLabelPlacementHierarchical,
@@ -132,6 +133,7 @@ export function ReactGraphComponent() {
     recursiveEdgeRoutingStyle,
     uTurnSymmetry,
     allowShortcuts,
+    sampleHierarchical,
     // Hierarchical labels 
     edgeLabelPlacementHierarchical,
     nodeLabelPlacementHierarchical,
@@ -205,15 +207,16 @@ export function ReactGraphComponent() {
     ),
   ];
 
-  const filteredConnections = networkData.connections.filter(
-    (conn) =>
-      filteredNodes.some((node) => node.id === conn.source) &&
-      filteredNodes.some((node) => node.id === conn.target)
-  );
-
   const filteredGroups = networkData.groups.filter((group) =>
     group.nodeIds.some((nodeId) => filteredNodes.some((node) => node.id === nodeId))
   );
+
+  const filteredConnections = networkData.connections.filter(
+    (conn) =>
+      filteredNodes.some((node) => node.id === conn.source) ||
+      filteredGroups.some((group) => group.id === conn.target)
+  );
+
 
   const filteredNetworkData = {
     nodes: filteredNodes,
@@ -242,7 +245,7 @@ export function ReactGraphComponent() {
     }
 
     const graphComponent = graphComponentRef.current!;
-    
+    console.log("filter ya nhiiiiiiiiiiiiiiiiiiiiiii",filteredNetworkData);
     createSampleGraph(graphComponent.graph, layout, layoutConfig, filteredNetworkData);
 
     graphComponent.graph.nodes.forEach((node) => {
@@ -276,6 +279,7 @@ export function ReactGraphComponent() {
     edgeToEdge,
     nodeToNode,
     nodeToEdge,
+    sampleHierarchical,
     layerToLayer,
     hierarchicalOrientation,
     edgeRoutingStyle,

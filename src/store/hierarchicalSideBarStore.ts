@@ -15,6 +15,9 @@ interface HierarchicalSideBarState {
   layoutComponentsSeparately: boolean;
   layoutSubComponentsSeparately: boolean;
   symmetricPlacement: boolean;
+  // sample p
+  sampleHierarchical : boolean;
+  
   // edges
   edgeRoutingStyle: string;
   backloopRouting: boolean;
@@ -76,6 +79,7 @@ interface HierarchicalSideBarState {
   setEdgeOrientation: (value: string) => void;
   setAlongEdge: (value: string) => void;
   setSideOfSide: (value: string) => void;
+  setSampleHierarchical : (value: boolean) => void;
 }
 
 const useHierarchicalSideBarStore = create<HierarchicalSideBarState>((set) => ({
@@ -110,6 +114,7 @@ const useHierarchicalSideBarStore = create<HierarchicalSideBarState>((set) => ({
   recursiveEdgeRoutingStyle: 'Off',
   uTurnSymmetry: 50,
   allowShortcuts: false,
+  sampleHierarchical: false,
 
   // labels
   edgeLabelPlacementHierarchical: 'ignore',
@@ -156,6 +161,7 @@ const useHierarchicalSideBarStore = create<HierarchicalSideBarState>((set) => ({
   setEdgeOrientation: (value: string) => set({ edgeOrientation: value }),
   setAlongEdge: (value: string) => set({ alongEdge: value}),
   setSideOfSide: (value: string) => set({ sideOfSide: value}),
+  setSampleHierarchical: (value : boolean) => set({ sampleHierarchical: value}),
 }));
 
 export default useHierarchicalSideBarStore;

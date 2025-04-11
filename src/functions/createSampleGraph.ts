@@ -75,6 +75,7 @@ interface LayoutConfig {
   recursiveEdgeRoutingStyle?: RecursiveEdgePolicy | string;
   uTurnSymmetry?: number;
   allowShortcuts?: boolean;
+  sampleHierarchical?: boolean;
 
   edgeLabelPlacementHierarchical: EdgeLabelPlacement | EdgeLabelPlacementStringValues;
   nodeLabelPlacementHierarchical: NodeLabelPlacement | NodeLabelPlacementStringValues;
@@ -128,29 +129,34 @@ interface LayoutConfig {
 
 export function createSampleGraph(graph: IGraph, layout: string, config: LayoutConfig, networkData: NetworkData): void {
   const nodeMap = new Map();
+  const groupMap = new Map<string, any>();
+ 
+  console.log("groupMap nodes: ",groupMap);
+  console.log("nodeMap nodes: ",nodeMap);
+  
   networkData.nodes.forEach((node) => {
     const newNode = graph.createNodeAt({ location: [0, 0] });
     let iconPath;
-    if (node.type === 'fat-switch') {
+    if (node.type === DeviceType.FAT_SWITCH) {
       iconPath = node.status === 'warning' ? switchHalfYellow : switchHalfGreen;
-    } else if (node.type === 'switch') {
+    } else if (node.type === DeviceType.SWITCH) {
       iconPath = node.status === 'warning' ? switchDYellow : switchDGreen;
-    } else if (node.type === 'backhaul') {
+    } else if (node.type === DeviceType.BACKHAUL) {
       iconPath = backhaulIcon;
-    } else if (node.type === 'unknown') {
+    } else if (node.type === DeviceType.UNKNOWN) {
       iconPath = unkownIcon;
-    } else if (node.type === 'internet') {
+    } else if (node.type === DeviceType.INTERNET) {
       iconPath = Internet;
-    } else if (node.type === 'WAN') {
+    } else if (node.type === DeviceType.WAN) {
       iconPath = WAN;
-    } else if (node.type === 'firewall'){
+    } else if (node.type === DeviceType.FIREWALL) {
       iconPath = node.status === 'warning' ? fireWallYellow : fireWallRed;
-    } else if (node.type === 'load-balancer'){
-      if(node.status === 'warning'){
+    } else if (node.type === DeviceType.LOAD_BALANCER) {
+      if (node.status === 'warning') {
         iconPath = loadBalancerYellow;
-      } else if(node.status === 'active'){
+      } else if (node.status === 'active') {
         iconPath = loadBalancerGreen;
-      } else if(node.status === 'inactive'){
+      } else if (node.status === 'inactive') {
         iconPath = loadBalancerRed;
       }
     }
@@ -160,7 +166,7 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
 
     const labelModel = new ExteriorNodeLabelModel();
     const labelText = node.label ? `${node.label}\n${node.ip}` : '';
-    const labelParameter = labelModel.createParameter('bottom-left');
+    const labelParameter = labelModel.createParameter('bottom');
     
     let label = null;
     if (node.label) {
@@ -170,17 +176,57 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
     newNode.tag = { labelText, labelParameter, label, data: node };
     nodeMap.set(node.id, newNode);
   });
+  // grouping logic
+  if (config.sampleHierarchical && networkData.groups && networkData.groups.length > 0) {
+    networkData.groups.forEach((group) => {
+      const groupNode = graph.createGroupNode();
+      // console.log('logginggggggggggggggggggggggggggggg', groupNode);
+      const nodeStyle = new ShapeNodeStyle({
+        shape: 'round-rectangle',
+        fill: '#E0E0E0',
+        stroke: new Stroke('#000000', 0.3),
+        // cssClass: 'group-node',
+      });
+      graph.setStyle(groupNode, nodeStyle);
+
+      const labelModel = new ExteriorNodeLabelModel();
+      const label = graph.addLabel({
+        owner: groupNode,
+        text: group.label!,
+        layoutParameter: labelModel.createParameter('bottom'),
+        style: new LabelStyle({
+          textFill: 'black',
+          cssClass: 'group-tab',
+          textSize: 15,
+          backgroundFill: 'powderblue',
+          verticalTextAlignment:'center',
+          wrapping: 'wrap-word',
+          padding: 8,
+          minimumSize: { width: 20, height: 20 },
+          backgroundStroke: '1px solid #242265',
+          shape: 'pill',
+          font : "italic Tahoma"
+        }), 
+      });
+
+      const nodesToGroup = group.nodeIds.map((nodeId) => nodeMap.get(nodeId)).filter(Boolean);
+      if (nodesToGroup.length > 0) {
+        graph.groupNodes(groupNode, nodesToGroup);
+      }
+      groupMap.set(group.id, groupNode); 
+      // console.log('Nodes to grouppppppppppppppp-:',nodesToGroup);
+    });
+  }
 
   const edgeLabelModel = new FreeEdgeLabelModel();
 
-  networkData.connections.forEach(edge => {
+  networkData.connections.forEach((edge) => {
     const sourceNode = nodeMap.get(edge.source);
-    const targetNode = nodeMap.get(edge.target);
-    
+    const targetNode = nodeMap.get(edge.target) || groupMap.get(edge.target); 
+    console.log("Target Node: ====", groupMap.get(edge.target))
     if (sourceNode && targetNode) {
       const graphEdge = graph.createEdge(sourceNode, targetNode);
       let edgeStyle: PolylineEdgeStyle;
-
       edgeStyle = new PolylineEdgeStyle({
         smoothingLength: 10,
       });
@@ -211,11 +257,15 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
           }),
           padding: [5, 5, 5, 5],
           textSize: 10,
-          textFill: '#000000',
+          textFill: '#000000', 
           autoFlip: false,
         }));
       }
+      // console.log(`Edge created: ${edge.source} -> ${edge.target}`); 
+    } else {
+      console.warn(`Edge skipped: Source ${edge.source} or target ${edge.target} not found in nodeMap or groupMap. SourceNode: ${sourceNode}, TargetNode: ${targetNode}`);
     }
+    
   });
 
   let layoutAlgorithm;
@@ -247,45 +297,11 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
   };
 
   if (layout === 'Hierarchical') {
-    const groupMap = new Map<string, any>(); 
-    if (networkData.groups && networkData.groups.length > 0) {
-      networkData.groups.forEach((group) => {
-        const groupNode = graph.createGroupNode();
-
-        const nodeStyle = new ShapeNodeStyle({
-          shape: 'round-rectangle', 
-          fill: '#E0E0E0', 
-          stroke: new Stroke('#000000', 0.3),
-          cssClass: 'group-node',
-          
-        });
-        graph.setStyle(groupNode, nodeStyle);
-
-        const labelModel = new ExteriorNodeLabelModel();
-        const label = graph.addLabel({
-          owner: groupNode,
-          text: group.label!,
-          layoutParameter: labelModel.createParameter('bottom'),
-          style: new LabelStyle({
-            textFill: '#000000',
-            cssClass: 'group-tab',
-            textSize: 15
-          })
-        });
-
-        const nodesToGroup = group.nodeIds.map((nodeId) => nodeMap.get(nodeId)).filter(Boolean);
-        if (nodesToGroup.length > 0) {
-          graph.groupNodes(groupNode, nodesToGroup);
-        }
-        groupMap.set(group.id, groupNode);
-      });
-    }
-
     layoutAlgorithm = new HierarchicalLayout({
       layoutOrientation: mapOrientationToLayoutOrientation(config.layoutOrientation || 'Top to Bottom'),
-      nodeDistance: config.nodeDistance || 25,
+      nodeDistance: config.nodeDistance || 50, 
       nodeToEdgeDistance: config.nodeToEdgeDistance || 5,
-      edgeDistance: config.edgeDistance || 17,
+      edgeDistance: config.edgeDistance || 30, 
       minimumLayerDistance: config.minimumLayerDistance || 5,
       stopDuration: config.stopDuration,
       defaultEdgeDescriptor: {
@@ -301,7 +317,7 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
       },
       edgeLabelPlacement: config.edgeLabelPlacementHierarchical as EdgeLabelPlacement,
       nodeLabelPlacement: config.nodeLabelPlacementHierarchical as NodeLabelPlacement,
-      automaticEdgeGrouping : false
+      automaticEdgeGrouping: false,
     });
   
     layoutData = new HierarchicalLayoutData({
