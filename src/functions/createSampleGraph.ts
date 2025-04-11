@@ -183,8 +183,8 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
       // console.log('logginggggggggggggggggggggggggggggg', groupNode);
       const nodeStyle = new ShapeNodeStyle({
         shape: 'round-rectangle',
-        fill: '#E0E0E0',
-        stroke: new Stroke('#000000', 0.3),
+        fill: '#ffe6f9',
+        stroke: new Stroke('#4d003b', 1.8),
         // cssClass: 'group-node',
       });
       graph.setStyle(groupNode, nodeStyle);
@@ -198,14 +198,14 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
           textFill: 'black',
           cssClass: 'group-tab',
           textSize: 15,
-          backgroundFill: 'powderblue',
+          backgroundFill: '#ff80e1',
           verticalTextAlignment:'center',
           wrapping: 'wrap-word',
           padding: 8,
           minimumSize: { width: 20, height: 20 },
           backgroundStroke: '1px solid #242265',
           shape: 'pill',
-          font : "italic Tahoma"
+          font : 'italic Tahoma'
         }), 
       });
 
