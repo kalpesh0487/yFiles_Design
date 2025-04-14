@@ -10,8 +10,6 @@ const HierarchicalSidebar = () => {
     nodeToNode,
     nodeToEdge,
     layerToLayer,
-    sample,
-    preset,
     orientation,
     layoutComponentsSeparately,
     layoutSubComponentsSeparately,
@@ -36,7 +34,6 @@ const HierarchicalSidebar = () => {
     edgeOrientation,
     alongEdge,
     sideOfSide,
-    sampleHierarchical,
     toggleGeneral,
     toggleEdges,
     toggleLabelling,
@@ -45,8 +42,6 @@ const HierarchicalSidebar = () => {
     setNodeToNode,
     setNodeToEdge,
     setLayerToLayer,
-    setSample,
-    setPreset,
     setOrientation,
     toggleLayoutComponentsSeparately,
     toggleLayoutSubComponentsSeparately,
@@ -71,42 +66,21 @@ const HierarchicalSidebar = () => {
     setEdgeOrientation,
     setAlongEdge,
     setSideOfSide,
-    setSampleHierarchical
   } = useHierarchicalSideBarStore();
 
 
   return (
     <>
-      <div className="flex items-center justify-between mb-2 w-full ">
+      <div className="flex items-center justify-between mb-2 w-full">
         <label className="text-sm text-black whitespace-nowrap flex items-center">Sample</label>
-        <select
-          value={sample}
-          onChange={(e) => {
-            const selectedValue = e.target.value;
-            setSample(selectedValue);
-            setSampleHierarchical(selectedValue === 'Grouping');
-          }}
-          className="w-55 p-0.5 border text-[15px] cursor-pointer rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        <div
+          className="w-55 px-2 text-[15px] border rounded-md bg-white"
         >
-          <option>Default</option>
-          <option>Grouping</option>
-          {/* <option>Bus Structures</option>
-          <option>Registration Flowchart</option> */}
-        </select>
+          Grouping
+        </div>
       </div>
 
       <div className="w-full h-[1px] bg-black mt-3"></div>
-
-      <div className="flex items-center justify-between mt-2 w-full mb-2">
-        <label className="text-sm text-black whitespace-nowrap flex items-center">Preset:</label>
-        <select
-          value={preset}
-          onChange={(e) => setPreset(e.target.value)}
-          className="w-55 p-0.5 text-[15px] border cursor-pointer rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <option>Default</option>
-        </select>
-      </div>
 
       <div>
         <div className="border-b">
@@ -530,10 +504,7 @@ const HierarchicalSidebar = () => {
           )}
         </div>
 
-        <div className="flex justify-between my-2">
-          <div className="border p-1 rounded-lg px-2 cursor-pointer">Preview</div>
-          <div className="border p-1 rounded-lg px-2 bg-[#1E1E1E] cursor-pointer text-white">Save Settings</div>
-        </div>
+        
       </div>
     </>
   );

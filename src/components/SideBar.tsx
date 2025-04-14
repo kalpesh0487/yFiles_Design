@@ -1,9 +1,5 @@
 import useSideBarStore from '../store/sideBarStore';
-import CircularSidebar from './CircularSidebar';
 import HierarchicalSidebar from './HierarchicalSidebar';
-import OrganicSidebar from './OrganicSidebar';
-import OrthogonalSidebar from './OrthogonalSidebar';
-import TreeSidebar from './TreeSidebar';
 
 const SideBar = () => {
   const {
@@ -34,24 +30,14 @@ const SideBar = () => {
 
           <div className="flex items-center justify-between mb-2 w-full">
             <label className="text-sm text-black whitespace-nowrap flex items-center">Layout</label>
-            <select
-              value={layout}
-              onChange={(e) => setLayout(e.target.value)}
-              className="w-55 p-0.5 text-[15px] border cursor-pointer rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            <div
+              className="w-55 px-2 text-[15px] border rounded-md bg-white"
             >
-              <option>Hierarchical</option>
-              <option>Organic</option>
-              <option>Orthogonal</option>
-              <option>Circular</option>
-              <option>Tree</option>
-            </select>
+              Hierarchical
+            </div>
           </div>
 
-          {layout === 'Hierarchical' && <HierarchicalSidebar />}
-          {layout === 'Organic' && <OrganicSidebar />}
-          {layout === 'Orthogonal' && <OrthogonalSidebar />}
-          {layout === 'Circular' && <CircularSidebar />}
-          {layout === 'Tree' && <TreeSidebar />}
+         <HierarchicalSidebar />
         </>
       )}
 

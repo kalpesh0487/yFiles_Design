@@ -1,5 +1,4 @@
 import { CircularLayoutEdgeRoutingPolicy, CircularLayoutPartitioningPolicy, HierarchicalLayoutRoutingStyle, LabelAlongEdgePlacements, LabelAngleReferences, LabelEdgeSides, LayoutOrientation, OrganicLayoutClusteringPolicy, RecursiveEdgePolicy } from "@yfiles/yfiles"
-import { LabelPlacementOrientation } from "../types/types";
 
 export function mapAlongEdge(along: string): LabelAlongEdgePlacements {
   

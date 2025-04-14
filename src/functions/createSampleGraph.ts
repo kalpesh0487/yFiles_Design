@@ -1,15 +1,11 @@
 import { 
   ExteriorNodeLabelModel,
   HierarchicalLayout,
-  OrthogonalLayout,
   IGraph,
   ImageNodeStyle,
   Stroke,
-  CircularLayout,
-  OrganicLayout,
   LabelStyle,
   PolylineEdgeStyle,
-  TreeLayout,
   HierarchicalLayoutRoutingStyle,
   RecursiveEdgePolicy,
   EdgeLabelPlacement,
@@ -22,9 +18,6 @@ import {
   LabelEdgeSidesStringValues,
   LabelAlongEdgePlacementsStringValues,
   HierarchicalLayoutData,
-  OrthogonalLayoutData,
-  OrganicLayoutData,
-  TreeLayoutData,
   LabelAngleReferences,
   FreeEdgeLabelModel,
   ShapeNodeStyle 
@@ -131,8 +124,6 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
   const nodeMap = new Map();
   const groupMap = new Map<string, any>();
  
-  console.log("groupMap nodes: ",groupMap);
-  console.log("nodeMap nodes: ",nodeMap);
   
   networkData.nodes.forEach((node) => {
     const newNode = graph.createNodeAt({ location: [0, 0] });
@@ -177,7 +168,7 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
     nodeMap.set(node.id, newNode);
   });
   // grouping logic
-  if (config.sampleHierarchical && networkData.groups && networkData.groups.length > 0) {
+  if (networkData.groups && networkData.groups.length > 0) {
     networkData.groups.forEach((group) => {
       const groupNode = graph.createGroupNode();
       // console.log('logginggggggggggggggggggggggggggggg', groupNode);
@@ -331,94 +322,7 @@ export function createSampleGraph(graph: IGraph, layout: string, config: LayoutC
       },
     });
   }
-  else if (layout === 'Orthogonal') {
-    layoutAlgorithm = new OrthogonalLayout({
-      gridSpacing: config.gridSpacing || 30,
-      layoutMode: config.layoutMode === 'Forced Straight Line' ? 'forced-straight-line' : config.layoutMode === 'Relaxed' ? 'relaxed' : 'strict',
-      defaultEdgeDescriptor: {
-        minimumFirstSegmentLength: config.minimumFirstSegmentLengthOrthogonal || 10,
-        minimumSegmentLength: config.minimumSegmentLength || 10,
-        minimumLastSegmentLength: config.minimumLastSegmentLengthOrthogonal || 10,
-      },
-      edgeLabelPlacement: config.edgeLabelPlacementOrthogonal,
-      nodeLabelPlacement: config.nodeLabelPlacementOrthogonal,
-    });
-
-    layoutData = new OrthogonalLayoutData({
-      edgeLabelPreferredPlacements: () => {
-        const descriptor = new EdgeLabelPreferredPlacement({
-          placementAlongEdge: mapAlongEdge(config.alongEdgeOrthogonal),
-          edgeSide: mapEdgeSide(config.sideOfSideOrthogonal),
-        });
-        applyLabelOrientation(descriptor, config.edgeOrientationOrthogonal);
-        return descriptor;
-      },
-    });
-  } else if (layout === 'Circular') {
-    layoutAlgorithm = new CircularLayout({
-      partitioningPolicy: mapPartitioningPolicy(config.partitioningPolicy || 'BCC Compact'),
-      fromSketchMode: config.fromSketchMode || false,
-      edgeRoutingPolicy: mapCircularEdgeRoutingPolicy(config.edgeRoutingStyleCircular),
-      edgeBundling: {
-        bundlingStrength: config.bundlingStrength,
-        defaultBundleDescriptor: {
-          bundled: config.enableEdgeBundling
-        }
-      },
-      edgeLabelPlacement: config.edgeLabelPlacementCircular,
-      nodeLabelPlacement: config.nodeLabelPlacementCircular,
-    });
-
-    layoutData = new OrganicLayoutData({ 
-      edgeLabelPreferredPlacements: () => {
-        const descriptor = new EdgeLabelPreferredPlacement({
-          placementAlongEdge: mapAlongEdge(config.alongEdgeCircular),
-          edgeSide: mapEdgeSide(config.sideOfSideCircular),
-        });
-        applyLabelOrientation(descriptor, config.edgeOrientationCircular);
-        return descriptor;
-      },
-    });
-  } else if (layout === 'Organic') {
-    layoutAlgorithm = new OrganicLayout({
-      layoutOrientation: mapOrientationToLayoutOrientation(config.organicOrientation || 'Top to Bottom'),
-      clusteringPolicy: mapClusteringPolicy(config.clustering || 'Edge Betweenness'),
-      defaultPreferredEdgeLength: config.preferredEdgeLength || 3,
-      defaultMinimumNodeDistance: config.minimumNodeDistance || 4,
-      compactnessFactor: config.compactness || 0.2,
-      avoidNodeEdgeOverlap: config.avoidNodeEdgeOverlap || false,
-      edgeLabelPlacement: config.edgeLabelPlacementOrganic,
-      nodeLabelPlacement: config.nodeLabelPlacementOrganic,
-    });
-
-    layoutData = new OrganicLayoutData({
-      edgeLabelPreferredPlacements: () => {
-        const descriptor = new EdgeLabelPreferredPlacement({
-          placementAlongEdge: mapAlongEdge(config.alongEdgeOrganic),
-          edgeSide: mapEdgeSide(config.sideOfSideOrganic),
-        });
-        applyLabelOrientation(descriptor, config.edgeOrientationOrganic);
-        return descriptor;
-      },
-    });
-  } else if (layout === 'Tree') {
-    layoutAlgorithm = new TreeLayout({
-      layoutOrientation: mapOrientationToLayoutOrientation(config.treeOrientation || 'Top to Bottom'),
-      edgeLabelPlacement: config.edgeLabelPlacementTree,
-      nodeLabelPlacement: config.nodeLabelPlacementTree,
-    });
-
-    layoutData = new TreeLayoutData({
-      edgeLabelPreferredPlacements: () => {
-        const descriptor = new EdgeLabelPreferredPlacement({
-          placementAlongEdge: mapAlongEdge(config.alongEdgeTree),
-          edgeSide: mapEdgeSide(config.sideOfSideTree),
-        });
-        applyLabelOrientation(descriptor, config.edgeOrientationTreeTree);
-        return descriptor;
-      },
-    });
-  }
+  
 
   if (layoutAlgorithm) {
     graph.applyLayout(layoutAlgorithm, layoutData);
