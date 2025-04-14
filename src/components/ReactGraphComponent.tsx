@@ -115,7 +115,6 @@ export function ReactGraphComponent() {
       filteredGroups.some((group) => group.id === conn.target)
   );
 
-
   const filteredNetworkData = {
     nodes: filteredNodes,
     connections: filteredConnections,

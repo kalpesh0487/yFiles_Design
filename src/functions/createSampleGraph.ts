@@ -53,6 +53,7 @@ interface LayoutConfig {
   minimumLayerDistance?: number;
   stopDuration?: number;
   layoutOrientation?: string;
+
   edgeRoutingStyle?: HierarchicalLayoutRoutingStyle | string;
   backloopRouting?: boolean;
   automaticEdgeGrouping?: boolean;
@@ -76,48 +77,7 @@ interface LayoutConfig {
   alongEdge: LabelAlongEdgePlacementsStringValues;
   sideOfSide: LabelEdgeSidesStringValues;
 
-  preferredEdgeLength?: number;
-  minimumNodeDistance?: number;
-  avoidNodeEdgeOverlap?: boolean;
-  compactness?: number;
-  organicOrientation?: string;
-  clustering?: string;
-
-  edgeLabelPlacementOrganic: EdgeLabelPlacement | EdgeLabelPlacementStringValues;
-  nodeLabelPlacementOrganic: NodeLabelPlacement | NodeLabelPlacementStringValues;
-  edgeOrientationOrganic: LabelPlacementOrientation; 
-  alongEdgeOrganic: LabelAlongEdgePlacementsStringValues;
-  sideOfSideOrganic: LabelEdgeSidesStringValues;
   
-  gridSpacing?: number;
-  layoutMode?: string;
-  minimumFirstSegmentLengthOrthogonal?: number;
-  minimumSegmentLength?: number;
-  minimumLastSegmentLengthOrthogonal?: number;
-  routeSelectedEdgesDownwards?: boolean;
-  edgeLabelPlacementOrthogonal: EdgeLabelPlacement | EdgeLabelPlacementStringValues;
-  nodeLabelPlacementOrthogonal: NodeLabelPlacement | NodeLabelPlacementStringValues;
-  edgeOrientationOrthogonal: LabelPlacementOrientation; 
-  alongEdgeOrthogonal: LabelAlongEdgePlacementsStringValues;
-  sideOfSideOrthogonal: LabelEdgeSidesStringValues;
-  
-  partitioningPolicy?: string;
-  fromSketchMode?: boolean;
-  enableEdgeBundling: boolean;
-  bundlingStrength: number;
-  edgeRoutingStyleCircular: string;
-  edgeLabelPlacementCircular: RadialEdgeLabelPlacement | RadialEdgeLabelPlacementStringValues | undefined;
-  nodeLabelPlacementCircular: RadialNodeLabelPlacement | RadialNodeLabelPlacementStringValues | undefined;
-  edgeOrientationCircular: LabelPlacementOrientation; 
-  alongEdgeCircular: LabelAlongEdgePlacementsStringValues;
-  sideOfSideCircular: LabelEdgeSidesStringValues;
-
-  treeOrientation?: string;
-  edgeLabelPlacementTree: EdgeLabelPlacement | EdgeLabelPlacementStringValues;
-  nodeLabelPlacementTree: NodeLabelPlacement | NodeLabelPlacementStringValues;
-  edgeOrientationTreeTree: LabelPlacementOrientation;
-  alongEdgeTree: LabelAlongEdgePlacementsStringValues;
-  sideOfSideTree: LabelEdgeSidesStringValues;
 }
 
 export function createSampleGraph(graph: IGraph, layout: string, config: LayoutConfig, networkData: NetworkData): void {
