@@ -71,16 +71,6 @@ const HierarchicalSidebar = () => {
 
   return (
     <>
-      <div className="flex items-center justify-between mb-2 w-full">
-        <label className="text-sm text-black whitespace-nowrap flex items-center">Sample</label>
-        <div
-          className="w-55 px-2 text-[15px] border rounded-md bg-white"
-        >
-          Grouping
-        </div>
-      </div>
-
-      <div className="w-full h-[1px] bg-black mt-3"></div>
 
       <div>
         <div className="border-b">

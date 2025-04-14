@@ -25,17 +25,10 @@ const SideBar = () => {
       {!isCollapsed && (
         <>
           <div className="flex">
-            <h2 className="text-xl text-black mb-3 ml-10">TOPOLOGY SETTINGS</h2>
+            <h2 className="text-xl text-black mb-1 ml-10">TOPOLOGY SETTINGS</h2>
           </div>
 
-          <div className="flex items-center justify-between mb-2 w-full">
-            <label className="text-sm text-black whitespace-nowrap flex items-center">Layout</label>
-            <div
-              className="w-55 px-2 text-[15px] border rounded-md bg-white"
-            >
-              Hierarchical
-            </div>
-          </div>
+          
 
          <HierarchicalSidebar />
         </>
