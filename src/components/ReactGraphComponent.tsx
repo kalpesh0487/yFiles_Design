@@ -246,6 +246,7 @@ export function ReactGraphComponent() {
 
     const graphComponent = graphComponentRef.current!;
     console.log("filter ya nhiiiiiiiiiiiiiiiiiiiiiii",filteredNetworkData);
+    //@ts-ignore
     createSampleGraph(graphComponent.graph, layout, layoutConfig, filteredNetworkData);
 
     graphComponent.graph.nodes.forEach((node) => {
