@@ -16,6 +16,8 @@
     "@yfiles/yfiles": "file:../../../Users/HP/Downloads/yFiles-for-HTML-Complete-3.0-Evaluation/yFiles-for-HTML-Complete-3.0-Evaluation/lib/yfiles-30.0.0+eval-dev/package",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-hook-form": "^7.56.1",
+    "react-icons": "^5.5.0",
     "tailwindcss": "^4.0.14",
     "zustand": "^5.0.3"
   },

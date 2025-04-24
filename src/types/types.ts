@@ -52,3 +52,11 @@ export enum LabelPlacementOrientation {
     HORIZONTAL,
     VERTICAL
 };
+
+
+export type FormData = {
+    label: string;
+    type: string;
+    ip: string;
+    status: string;
+};

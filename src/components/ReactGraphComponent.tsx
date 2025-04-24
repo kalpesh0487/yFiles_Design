@@ -19,6 +19,7 @@ import { useNetworkStore } from '../store/dataStore';
 import useSideBarStore from '../store/sideBarStore';
 import { useDeviceSelectionStore } from '../store/deviceSelectionStore';
 import { DeviceType } from '../types/types';
+import Form from './Form';
 
 export function ReactGraphComponent() {
   const graphComponentContainer = useRef<HTMLDivElement>(null);
@@ -361,6 +362,9 @@ export function ReactGraphComponent() {
       <div className="graph-component-container " ref={graphComponentContainer} />
       <div className="absolute bottom-4 left-4">
         <Inventory />
+      </div>
+      <div className="absolute top-4 left-4">
+        <Form/>
       </div>
     </div>
   );
